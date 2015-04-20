@@ -1,0 +1,15 @@
+CSC 101=Intro to Programming=Problem-solving, algorithm development, computer programming, overview of computer science
+CSC 102=Advanced Computer Programming=Continuation of CSC 101 with emphasis on programming style and algorithm analysis
+CSC 203=Intro to Computer Systems=Computer systems and architecture, assembler language programming
+CSC 204=Computer Organizations=Fundamentals of logic design, organization and structuring of computer hardware components, mechanics of information transfer and control within a digital computer system
+CSC 306=Operating Systems=An in-depth study of operating systems (batch, time-sharing and real-time systems)
+CSC 307=Data Structures=Data structures and algorithms for their manipulation. Lists and arrays; stacks, queues, linked lists, tree structures; elementary sorting and searching routines
+CSC 317=Object Oriented Programming=Conceptual overview, characteristics of an object oriented language, objects, classes, arrays, operator overloading, inheritance, virtual functions, streams
+CSC 320=Intro to Linear Programming=Formulation of models, graphical solutions, matrix operations, simplex method, two-phase technique, duality, convexity, simultaneous linear equations, vector spaces
+CSC 408=Organization of Programming Languages=Formal study of programming languages, organization of programming languages, run-time behavior of programs, interpretative language, lexical analysis and parsing
+CSC 411=Relational Database Management Systems=Introduction to RDBMSs. Includes database design using the entity relationship model, relational model theory, the relational algebra and the implementation of applications using SQL and a state-of-the-art relational system such as Oracle
+CSC 412=Intro to Artificial Intelligence=Computer representation of knowledge, problem solving, automated deductive systems, computer learning, computer implementation of AI problems, expert systems
+CSC 413=Algorithms=Design and analysis of algorithms; complexity theory
+CSC 414=Software Design and Development=Overview of software developments, project management, programming style, testing, debugging and other topics
+CSC 415=Theory of Programming Languages=Formal treatment of programming language translation and compiler design concepts
+CSC 424=Software Engineering II=Programming languages and software design, modular/object oriented design, team programming, human factors, case studies; Senior capstone; writing intensive; oral communication intensive.

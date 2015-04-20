@@ -186,18 +186,17 @@ public class MainActivity extends Activity {
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuffer responseText = new StringBuffer();
-                responseText.append("The following were selected...\n");
+
+
 
                 List<Course> courseList = dataAdapter.courseList;
                 for (int i = 0; i < courseList.size(); i++){
                     Course course = courseList.get(i);
-                    if (course.isSelected()){
-                        responseText.append("\n" + course.getName());
-                    }
+                    course.setSelected(false);
+                    course.save();
                 }
                 Toast.makeText(getApplicationContext(),
-                        responseText, Toast.LENGTH_LONG).show();
+                        "Refreshed CheckBoxes", Toast.LENGTH_LONG).show();
 
             }
         });
