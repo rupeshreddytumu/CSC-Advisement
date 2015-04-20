@@ -24,11 +24,15 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     MyCustomAdapter dataAdapter = null;
+    CourseCreater courseCreater;
+    List<Course> userCourseList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.userCourseList = Course.listAll(Course.class);
 
         displayListView();
         checkButtonClick();
@@ -55,79 +59,30 @@ public class MainActivity extends Activity {
         ListView coursesListView = (ListView) findViewById(R.id.coursesListView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, courseList);*/
-        //Course.deleteAll(Course.class);
-        //Course course = new Course("CSC 101","Intro to C++",false);
-        //course.save();
 
-        try {
-            List<Course> courseList = Course.listAll(Course.class);
-            if (courseList.size() == 0){
 
-            Course.deleteAll(Course.class);
-            Course course = new Course(1L, "CSC 101", "Intro to C++", false);
-            course.save();
-            List<Course> selectedCourses = Course.find(Course.class, "code = ?", "CSC 101");
-            Course test = selectedCourses.get(0);
-            long testLong = test.ID;
-            course.setID(testLong);}
-            else {
-                List<Course> selectedCourses = Course.find(Course.class, "code = ?", "CSC 101");
-                Course test = selectedCourses.get(0);
-                long testLong = test.ID;
-                Course look = Course.findById(Course.class, testLong);
-                look.selected = look.isSelected();
-                look.save();
-                Log.d("look: ", String.valueOf(look));
+        if (this.userCourseList.size()==0){
+            courseCreater = new CourseCreater();
+            this.userCourseList = courseCreater.createDegreePlan();
+
+        } else {
+            this.userCourseList = Course.listAll(Course.class);}
+
+        /*try {
 
 
 
-
-            }
         } catch (Exception e) {
 
             Log.d("sugar", "failed to add a course");
             Log.d("sugar", e.toString());
-        }
+        }*/
 
-
-
-        /*Course course1 = new Course("2","CSC 102","Advanced C++",false);
-        course1.save();
-
-
-        Course course3 = new Course("3","CSC 307","Data Structures",false);
-        course3.save();
-
-
-        Course course4 = new Course("4","CSC 317","Object Oriented",false);
-        course4.save();
-
-
-        Course course5 = new Course("5","CSC 413","Intro to Algorithms",false);
-        course5.save();
-
-        Course course6 = new Course("6","CSC 414","Software Engineering I",false);
-        course6.save();
-
-        Course course7 = new Course("7","CSC 424","Software Engineering II",false);
-        course7.save();*/
-
-        List<Course> courseList = Course.listAll(Course.class);
-
-
-        //Course.find(Course.class, "course_id = 1");
-
-
-        //Toast.makeText(getApplicationContext(),"QUERY: " +  Course.find(Course.class, "code = CSC 101"), Toast.LENGTH_LONG).show();
-        //Course.find(Course.class, "code = CSC 102");
-        //Toast.makeText(getApplicationContext(),"book: " +  book, Toast.LENGTH_LONG).show();
-        //Toast.makeText(getApplicationContext(),"book1: " +  book1, Toast.LENGTH_LONG).show();
-
-
+        //List<Course> courseList = Course.listAll(Course.class);
 
         // create an ArrayAdapter from the String Array
         dataAdapter = new MyCustomAdapter(this,
-                R.layout.courses_taken, courseList);
+                R.layout.courses_taken, this.userCourseList);
         ListView coursesListView = (ListView) findViewById(R.id.coursesListView);
         // Assign adapter to ListView
         coursesListView.setAdapter(dataAdapter);
@@ -138,7 +93,7 @@ public class MainActivity extends Activity {
                 // when clicked, show a toast with the TextView text
                 Course course = (Course) parent.getItemAtPosition(position);
                 // come back to this toast
-                Toast.makeText(getApplicationContext(),"Clicked course: " + course.getName(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Clicked course: " + course.getName(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -177,9 +132,9 @@ public class MainActivity extends Activity {
                         CheckBox cb = (CheckBox) v;
                         Course course = (Course) cb.getTag();
 
-
-                        List<Course> selectedCourses = Course.find(Course.class, "code = ?", "CSC 101");
-                        //List<Course> selectedCourses = Course.find(Course.class, "code = ?", course.getCode());
+                        String code = course.getCode();
+                        //List<Course> selectedCourses = Course.find(Course.class, "code = ?", "CSC 101");
+                        List<Course> selectedCourses = Course.find(Course.class, "code = ?", code);
                         Course test = selectedCourses.get(0);
                         Long idk = test.getId();
 
@@ -191,17 +146,20 @@ public class MainActivity extends Activity {
                                         " is " + cb.isChecked(),
                                 Toast.LENGTH_LONG).show();
                         Course editCourse = Course.findById(Course.class, test.getId());
-                        //course.setSelected(cb.isChecked());
+                        editCourse.setSelected(cb.isChecked());
+                        editCourse.save();
+                        /*
                         if (editCourse.selected)
                         {
                             editCourse.setSelected(false);
-                            editCourse.save();
+                            //editCourse.save();
                         }
                         else
                         {
                             editCourse.setSelected(true);
-                            editCourse.save();
-                        }
+
+                        }*/
+                        //editCourse.save();
 
 
 

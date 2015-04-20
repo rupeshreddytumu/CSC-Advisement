@@ -14,6 +14,7 @@ public class Course extends SugarRecord<Course> {
     String code = null;
     String name = null;
 
+
     public Course(){
     }
 
@@ -24,6 +25,7 @@ public class Course extends SugarRecord<Course> {
         this.code = code;
         this.name = name;
         this.selected = selected;
+
     }
 
     public void setID(Long Id){
