@@ -8,47 +8,4 @@
 
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/linearLayout">
-
-        <Button
-            android:id="@+id/findSelected"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_courses" />
-
-
-        <ListView
-            android:id="@+id/coursesListView"
-            android:layout_height="fill_parent"
-            android:layout_width="fill_parent"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/lblName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_marginTop="40dip"
-        android:layout_marginBottom="10dip"
-        />
-
-
-    <TextView
-        android:id="@+id/lblEmail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_marginBottom="40dip"
-
-        />
-
-
-
-
-
 </LinearLayout>
