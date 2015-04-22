@@ -5,12 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 public class MainActivity extends Activity {
+    final String PREFS_NAME = "CSCAdvisement";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +38,21 @@ public class MainActivity extends Activity {
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (currentUser != null) {
                 // Send logged in users to Welcome.class
-                Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-                startActivity(intent);
-                finish();
+                try {
+                    if (checkIfRegistrationNeeded()){
+                        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                    Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             } else {
                 // Send user to LoginSignupActivity.class
                 Intent intent = new Intent(MainActivity.this,
@@ -47,7 +67,61 @@ public class MainActivity extends Activity {
 
     }
 
+    public boolean checkIfRegistrationNeeded() throws IOException {
 
+        FileInputStream fIn = openFileInput("registration.txt");
+        InputStreamReader isr = new InputStreamReader(fIn);
+
+        /* Prepare a char-Array that will
+         * hold the chars we read back in. */
+
+        String test = new String("Hello Android");
+         char[] inputBuffer = new char[test.length()];
+
+        // Fill the Buffer with data from the file
+        isr.read(inputBuffer);
+
+        // Transform the chars to a String
+        String readString = new String(inputBuffer);
+
+
+        if (readString.isEmpty()){
+            Toast.makeText(
+                    getApplicationContext(),
+                    "First time launching app",
+                    Toast.LENGTH_LONG).show();
+            writeFile();
+            return true;
+        }
+
+        Toast.makeText(
+                getApplicationContext(),
+                "INPUT: " + readString,
+                Toast.LENGTH_LONG).show();
+
+        return false;
+    }
+
+    public void writeFile() throws IOException {
+        Toast.makeText(
+                getApplicationContext(),
+                "Creating txt file!",
+                Toast.LENGTH_LONG).show();
+
+
+        final String test = new String("Hello Android");
+
+
+        FileOutputStream fOut = openFileOutput("registration.txt",
+                MODE_PRIVATE);
+        OutputStreamWriter osw = new OutputStreamWriter(fOut);
+
+        // Write the string to the file
+        osw.write(test);
+        osw.flush();
+        osw.close();
+
+    }
 
 
     @Override

@@ -1,10 +1,12 @@
-package com.calebdavis.cscadvisement;
+package com.calebdavis.cscadvisement.Services;
 
 /**
  * Created by Caleb Davis on 4/16/15.
  */
 
 import android.content.Context;
+
+import com.calebdavis.cscadvisement.R;
 
 import java.io.IOException;
 import java.io.InputStream;

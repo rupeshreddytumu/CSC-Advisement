@@ -54,10 +54,10 @@ public class LoginSignupActivity extends Activity {
                         new LogInCallback() {
                             public void done(ParseUser user, ParseException e) {
                                 if (user != null) {
-                                    // If user exist and authenticated, send user to Welcome.class
+                                    // If user exist and authenticated, send user to Main Activity
                                     Intent intent = new Intent(
                                             LoginSignupActivity.this,
-                                            WelcomeActivity.class);
+                                            MainActivity.class);
                                     startActivity(intent);
                                     Toast.makeText(getApplicationContext(),
                                             "Successfully Logged in",
