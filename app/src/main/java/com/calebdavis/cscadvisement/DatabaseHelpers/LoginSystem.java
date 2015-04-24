@@ -3,14 +3,16 @@ package com.calebdavis.cscadvisement.DatabaseHelpers;
 /**
  * Created by Caleb Davis on 4/21/15.
  */
-import com.orm.SugarApp;
+
+import android.app.Application;
+
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseUser;
 
 
 
-public class LoginSystem extends SugarApp {
+public class LoginSystem extends Application {
 
     @Override
     public void onCreate() {

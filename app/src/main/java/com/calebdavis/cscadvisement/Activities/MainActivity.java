@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
+import com.calebdavis.cscadvisement.SQLiteProject.SQLiteActivity;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
@@ -18,7 +19,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class MainActivity extends Activity {
-    final String PREFS_NAME = "CSCAdvisement";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +40,21 @@ public class MainActivity extends Activity {
                 // Send logged in users to Welcome.class
                 try {
                     if (checkIfRegistrationNeeded()){
-                        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                        Intent intent = new Intent(MainActivity.this, SQLiteActivity.class);
                         startActivity(intent);
                         finish();
                     }
                     else{
-                    Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SQLiteActivity.class);
                     startActivity(intent);
                     finish();
                     }
                 } catch (IOException e) {
+                    try {
+                        writeFile();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                     e.printStackTrace();
                 }
 
@@ -69,12 +74,17 @@ public class MainActivity extends Activity {
 
     public boolean checkIfRegistrationNeeded() throws IOException {
 
-        FileInputStream fIn = openFileInput("registration.txt");
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        // Convert currentUser into String
+        String struser = currentUser.getUsername().toString();
+        FileInputStream fIn = openFileInput(struser +"registration.txt");
         InputStreamReader isr = new InputStreamReader(fIn);
 
         /* Prepare a char-Array that will
          * hold the chars we read back in. */
-
+        //List<Course> selectedCourses = Course.find(Course.class, "selected = ?", "true");
         String test = new String("Hello Android");
          char[] inputBuffer = new char[test.length()];
 
@@ -108,11 +118,19 @@ public class MainActivity extends Activity {
                 "Creating txt file!",
                 Toast.LENGTH_LONG).show();
 
+        //List<Course> coursesTaken = Course.find(Course.class, "selected = ?", "true");
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String studentId = currentUser.getUsername().toString();
+        //if (!coursesTaken.isEmpty()){
+
 
         final String test = new String("Hello Android");
 
+        // Convert currentUser into String
 
-        FileOutputStream fOut = openFileOutput("registration.txt",
+
+
+        FileOutputStream fOut = openFileOutput(studentId + "registration.txt",
                 MODE_PRIVATE);
         OutputStreamWriter osw = new OutputStreamWriter(fOut);
 
@@ -121,7 +139,7 @@ public class MainActivity extends Activity {
         osw.flush();
         osw.close();
 
-    }
+    }//}
 
 
     @Override
@@ -151,9 +169,9 @@ public class MainActivity extends Activity {
 
         if (id == R.id.courses){
             // show courses taken
-            Intent intent = new Intent(this, CoursesTakenActivity.class);
-            startActivity(intent);
-            finish();
+            //Intent intent = new Intent(this, CoursesTakenActivity.class);
+            //startActivity(intent);
+            //finish();
         }
 
         return super.onOptionsItemSelected(item);

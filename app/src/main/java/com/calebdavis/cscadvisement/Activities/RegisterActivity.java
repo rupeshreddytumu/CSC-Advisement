@@ -1,10 +1,12 @@
 package com.calebdavis.cscadvisement.Activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.calebdavis.cscadvisement.R;
 import com.parse.ParseUser;
@@ -14,10 +16,37 @@ import com.parse.ParseUser;
  */
 public class RegisterActivity extends Activity{
 
+    EditText editTextUserName, editTextStudentAdvisor, editTextStudentEmail, editTextAdvisorEmail;
+    Button buttonCreateAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // student full name
+        editTextUserName = (EditText) findViewById(R.id.editTextUserName);
+        // advisor full name
+        editTextStudentAdvisor = (EditText) findViewById(R.id.editTextStudentAdvisor);
+        // student usm email
+        editTextStudentEmail = (EditText) findViewById(R.id.editTextStudentEmail);
+        // advisor usm email
+        editTextAdvisorEmail = (EditText) findViewById(R.id.editTextAdvisorEmail);
+        // submit button
+        buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
+
+        // Set OnClick Listener on SignUp button
+        buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+
+                // get studentID from login
+
+
+
+            }
+        });
     }
 
     @Override
@@ -47,9 +76,9 @@ public class RegisterActivity extends Activity{
 
         if (id == R.id.courses){
             // show courses taken
-            Intent intent = new Intent(this, CoursesTakenActivity.class);
-            startActivity(intent);
-            finish();
+            //Intent intent = new Intent(this, CoursesTakenActivity.class);
+            //startActivity(intent);
+            //finish();
         }
 
         return super.onOptionsItemSelected(item);

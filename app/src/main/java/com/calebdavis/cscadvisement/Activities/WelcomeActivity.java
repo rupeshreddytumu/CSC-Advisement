@@ -5,7 +5,6 @@ package com.calebdavis.cscadvisement.Activities;
  */
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,9 +80,9 @@ public class WelcomeActivity extends Activity {
 
         if (id == R.id.courses){
             // show courses taken
-            Intent intent = new Intent(this, CoursesTakenActivity.class);
-            startActivity(intent);
-            finish();
+            //Intent intent = new Intent(this, CoursesTakenActivity.class);
+            //startActivity(intent);
+            //finish();
         }
 
         return super.onOptionsItemSelected(item);
