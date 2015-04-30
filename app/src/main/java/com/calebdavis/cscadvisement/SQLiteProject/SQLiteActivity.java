@@ -1,18 +1,10 @@
 package com.calebdavis.cscadvisement.SQLiteProject;
 
 /**
- * Created by user on 4/23/15.
+ * Created by Caleb Davis on 4/23/15.
  */
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-
-import com.calebdavis.cscadvisement.R;
-
-import java.util.List;
-
-public class SQLiteActivity extends Activity {
+/*public class SQLiteActivity extends Activity {
 
     // Database Helper
     DatabaseHelper db;
@@ -113,4 +105,4 @@ public class SQLiteActivity extends Activity {
 
     }
 
-}
+}*/

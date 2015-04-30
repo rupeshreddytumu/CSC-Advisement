@@ -22,8 +22,8 @@
 
 
         <activity
-            android:name=".SQLiteProject.SQLiteActivity"
-            android:label="SQLite Example" >
+            android:name=".Services.CoursesTaken"
+            android:label="Courses" >
         </activity>
 
         <activity

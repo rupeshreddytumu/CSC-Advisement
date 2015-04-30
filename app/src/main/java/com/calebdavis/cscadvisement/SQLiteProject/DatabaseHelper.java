@@ -1,18 +1,6 @@
 package com.calebdavis.cscadvisement.SQLiteProject;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by user on 4/23/15.
- */
+/*
 public class DatabaseHelper extends SQLiteOpenHelper{
     // Logcat tag
     private static final String LOG = "DatabaseHelper";
@@ -83,9 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    /*
- * Creating a COMPLETED COURSE
- */
     public long createCourseCompleted(Courses course, long[] student_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -105,9 +90,27 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return course_id;
     }
 
-    /*
- * get single COMPLETED COURSE
- */
+    public Student getStudent(long student_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + STUDENTS_TABLE + " WHERE "
+                + KEY_ID + " = " + student_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Student student = new Student();
+        student.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        student.setStudentId((c.getString(c.getColumnIndex(KEY_STUDENT_ID))));
+        c.close();
+
+        return student;
+    }
+
     public Courses getCourse(long course_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -130,9 +133,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return course;
     }
 
-    /*
-    * getting all COURSES under single STUDENT
- * */
     public List<Courses> getAllCoursesByStudent(String student_id) {
         List<Courses> courses = new ArrayList<Courses>();
 
@@ -165,9 +165,33 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return courses;
     }
 
-    /*
-* Creating a COURSE
-*/
+
+    public List<Courses> getAllCourses() {
+        List<Courses> courses = new ArrayList<Courses>();
+        String selectQuery = "SELECT  * FROM " + COURSES_TABLE;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Courses course = new Courses();
+                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                course.setCourseId(c.getString(c.getColumnIndex(KEY_COURSE_ID)));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+
+                // adding to tags list
+                courses.add(course);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return courses;
+    }
+
+
     public long createCourse(Courses course) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -181,9 +205,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     }
 
-    /*
- * Updating a COURSE
- */
+
     public int updateCourse(Courses course) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -196,18 +218,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(course.getId()) });
     }
 
-    /*
- * Deleting a COURSE
- */
+
     public void deleteCourse(long course_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(COURSES_TABLE, KEY_ID + " = ?",
                 new String[] { String.valueOf(course_id) });
     }
 
-    /*
- * Creating a STUDENT
- */
 
     public long createStudent(Student student) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -220,9 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         return student_id;
     }
-    /**
-     * getting all STUDENTS
-     * */
+
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<Student>();
         String selectQuery = "SELECT  * FROM " + STUDENTS_TABLE;
@@ -247,9 +262,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return students;
     }
 
-    /*
- * Updating a STUDENT
- */
+
     public int updateStudent(Student student) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -261,9 +274,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(student.getId()) });
     }
 
-    /*
- * Deleting a student
- */
+
     public void deleteStudentsDegreeProgress(Student student, boolean should_delete_all_completed_courses) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -285,9 +296,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(student.getId()) });
     }
 
-    /*
-     * Assigning a course to a student
-     */
+
     public long addCourseToStudentsSchedule(long course_id, long student_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -302,9 +311,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return id;
     }
 
-    /*
- * Updating a student's current course
- */
     public int updateStudentsCurrentCourse(long id, long student_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -318,6 +324,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 new String[] { String.valueOf(id) });
     }
 
+
+
     // closing database
     public void closeDB() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -325,4 +333,4 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             db.close();
     }
 
-}
+}*/

@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
-import com.calebdavis.cscadvisement.SQLiteProject.SQLiteActivity;
+import com.calebdavis.cscadvisement.Services.CoursesTaken;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
@@ -40,12 +40,12 @@ public class MainActivity extends Activity {
                 // Send logged in users to Welcome.class
                 try {
                     if (checkIfRegistrationNeeded()){
-                        Intent intent = new Intent(MainActivity.this, SQLiteActivity.class);
+                        Intent intent = new Intent(MainActivity.this, CoursesTaken.class);
                         startActivity(intent);
                         finish();
                     }
                     else{
-                    Intent intent = new Intent(MainActivity.this, SQLiteActivity.class);
+                    Intent intent = new Intent(MainActivity.this, CoursesTaken.class);
                     startActivity(intent);
                     finish();
                     }
