@@ -243,12 +243,19 @@ public class CoursesDbAdapter {
         return mDb.insert(STUDENTS_TABLE, null, values);
     }
 
-    public boolean updateItem(long rowId, String status) {
+    public void update_byID(int id, String status, String course_id){
         ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, status);
+        values.put(KEY_COURSE_ID, course_id);
+        mDb.update(STUDENT_COURSES_TABLE, values, KEY_ID + "=" + id, null);
+    }
 
+    public boolean updateItem(long row_id, String status) {
+        ContentValues values = new ContentValues();
         values.put(KEY_STATUS, status);
 
-        return mDb.update(STUDENT_COURSES_TABLE, values, KEY_ID + "=" + rowId, null) > 0;
+
+        return mDb.update(STUDENT_COURSES_TABLE, values, KEY_ID + "=" + row_id, null) > 0;
     }
 
     public long addCourseToStudentsSchedule(long course_id, long student_id, String taken) {

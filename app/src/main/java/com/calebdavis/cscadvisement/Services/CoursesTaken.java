@@ -29,6 +29,8 @@ public class CoursesTaken extends Activity {
     String user_id;
     long user_row_id;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +107,7 @@ public class CoursesTaken extends Activity {
         Cursor cursor = dbHelper.fetchAllStudentCourses(user_id);
         String student_id_test = cursor.getString(cursor.getColumnIndexOrThrow("student_id"));
         String course_id_test = cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
-        String status_test = cursor.getString(cursor.getColumnIndexOrThrow("status"));
+        final String status_test = cursor.getString(cursor.getColumnIndexOrThrow("status"));
 
 
 
@@ -149,31 +151,40 @@ public class CoursesTaken extends Activity {
 
 
 
-                // Get the state's capital from this row in the database.
-                String course_id =
-                        cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
+                    // Get the state's capital from this row in the database.
+                    String course_id =
+                            cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
+                    String status =
+                            cursor.getString(cursor.getColumnIndexOrThrow("status"));
+                    long row_id = cursor.getLong(cursor.getColumnIndex("_id"));
 
-                Cursor cursor1 = dbHelper.fetchStudentCourseByCourseId(course_id);
-                long test_row_id = Long.parseLong(cursor1.getString(cursor.getColumnIndexOrThrow("_id")));
-
-
-                String status =
-                        cursor.getString(cursor.getColumnIndexOrThrow("status"));
-
-
-
-                dbHelper.updateItem(id, "true");
-                final TextView statusTextView = (TextView) findViewById(R.id.status);
-                statusTextView.setText("true");
+                    String newStatus = status;
 
 
 
 
-                //Toast.makeText(getApplicationContext(),
-                        //(int) completed_course_id, Toast.LENGTH_SHORT).show();
+                    TextView statusTextView = (TextView) findViewById(R.id.status);
+                    if (newStatus.equals("false")){
+
+                        newStatus = "true";
+                        dbHelper.updateItem(row_id, newStatus);
+                        statusTextView.setText(newStatus);
 
 
-            }
+                    }
+                    else if (newStatus.equals("true")){
+
+                        newStatus = "false";
+                        dbHelper.update_byID(position, newStatus, course_id);
+                        //dbHelper.updateItem(course_id, newStatus, user_id);
+                        statusTextView.setText(newStatus);
+
+                    }
+
+
+
+                }
+
 
         });
 
