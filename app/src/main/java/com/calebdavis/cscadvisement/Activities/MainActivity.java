@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
@@ -20,10 +22,22 @@ import java.io.OutputStreamWriter;
 
 public class MainActivity extends Activity {
 
+    Button buttonCreateAccount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
+
+        buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // Determine whether the current user is an anonymous user
         if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
@@ -40,12 +54,12 @@ public class MainActivity extends Activity {
                 // Send logged in users to Welcome.class
                 try {
                     if (checkIfRegistrationNeeded()){
-                        Intent intent = new Intent(MainActivity.this, CoursesTaken.class);
+                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();
                     }
                     else{
-                    Intent intent = new Intent(MainActivity.this, CoursesTaken.class);
+                    Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                     startActivity(intent);
                     finish();
                     }
@@ -169,9 +183,9 @@ public class MainActivity extends Activity {
 
         if (id == R.id.courses){
             // show courses taken
-            //Intent intent = new Intent(this, CoursesTakenActivity.class);
-            //startActivity(intent);
-            //finish();
+            Intent intent = new Intent(this, CoursesTaken.class);
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

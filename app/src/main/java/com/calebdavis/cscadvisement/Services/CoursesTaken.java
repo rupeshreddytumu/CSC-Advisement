@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.calebdavis.cscadvisement.DatabaseHelpers.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
@@ -163,21 +162,21 @@ public class CoursesTaken extends Activity {
 
 
 
-                    TextView statusTextView = (TextView) findViewById(R.id.status);
+
                     if (newStatus.equals("false")){
 
                         newStatus = "true";
                         dbHelper.updateItem(row_id, newStatus);
-                        statusTextView.setText(newStatus);
+                        //statusTextView.setText(newStatus);
 
 
                     }
                     else if (newStatus.equals("true")){
 
                         newStatus = "false";
-                        dbHelper.update_byID(position, newStatus, course_id);
+                        dbHelper.updateItem(row_id, newStatus)  ;
                         //dbHelper.updateItem(course_id, newStatus, user_id);
-                        statusTextView.setText(newStatus);
+                        //statusTextView.setText(newStatus);
 
                     }
 
