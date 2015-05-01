@@ -3,17 +3,17 @@ package com.calebdavis.cscadvisement.Services;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.calebdavis.cscadvisement.DatabaseHelpers.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
-import com.calebdavis.cscadvisement.SQLiteProject.Courses;
+import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -39,15 +39,26 @@ public class CoursesTaken extends Activity {
 
 
         //Clean all data
-        dbHelper.deleteAllCourses();
+        //dbHelper.deleteAllStudentCourses();
         //dbHelper.deleteAllCompletedCourses();
         //Add some data
-        dbHelper.insertInitialCourses();
+
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         String student_id = currentUser.getUsername().toString();
         this.user_id = student_id;
         this.user_row_id = dbHelper.createStudent(student_id);
+        try{
+            List<StudentCourse> test_list = dbHelper.testCoursesForSpecificStudent(user_id);
+            if ( test_list.size() == 0){
+                dbHelper.insertStudentCourses(user_id);
+
+            }
+
+        }catch(Exception e){
+
+        }
+
 
 
         //Generate ListView from SQLite Database
@@ -90,18 +101,28 @@ public class CoursesTaken extends Activity {
     }
 
     private void displayListView() {
-        Cursor cursor = dbHelper.fetchAllCourses();
-        List<Courses> courses =  dbHelper.getAllCoursesByStudent(user_id);
-        Log.e("courses completed by student:", String.valueOf(courses.size()));
+        List<StudentCourse> test = dbHelper.testCoursesForSpecificStudent(user_id);
+        Cursor cursor = dbHelper.fetchAllStudentCourses(user_id);
+        String student_id_test = cursor.getString(cursor.getColumnIndexOrThrow("student_id"));
+        String course_id_test = cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
+        String status_test = cursor.getString(cursor.getColumnIndexOrThrow("status"));
+
+
+
+
+
+
 
         // The desired columns to be bound
         String[] columns = new String[] {
+                CoursesDbAdapter.KEY_STUDENT_ID,
                 CoursesDbAdapter.KEY_COURSE_ID,
                 CoursesDbAdapter.KEY_STATUS,
         };
 
         // the XML defined views which the data will be bound to
         int[] to = new int[] {
+                R.id.sid,
                 R.id.cid,
                 R.id.status,
         };
@@ -132,8 +153,18 @@ public class CoursesTaken extends Activity {
                 String course_id =
                         cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
 
-                long course_row_id = id;
-                dbHelper.addCourseToStudentsSchedule(course_row_id, user_row_id);
+                Cursor cursor1 = dbHelper.fetchStudentCourseByCourseId(course_id);
+                long test_row_id = Long.parseLong(cursor1.getString(cursor.getColumnIndexOrThrow("_id")));
+
+
+                String status =
+                        cursor.getString(cursor.getColumnIndexOrThrow("status"));
+
+
+
+                dbHelper.updateItem(id, "true");
+                final TextView statusTextView = (TextView) findViewById(R.id.status);
+                statusTextView.setText("true");
 
 
 

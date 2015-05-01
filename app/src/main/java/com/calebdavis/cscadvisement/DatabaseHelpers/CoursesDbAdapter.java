@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.calebdavis.cscadvisement.SQLiteProject.Courses;
+import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class CoursesDbAdapter {
     private static final String COURSES_TABLE = "Courses";
     private static final String STUDENTS_TABLE = "Students";
     private static final String COMPLETED_COURSES_TABLE = "CoursesCompleted";
+    private static final String STUDENT_COURSES_TABLE = "StudentCourses";
+
 
     private final Context mCtx;
 
@@ -58,10 +61,14 @@ public class CoursesDbAdapter {
     private static final String CREATE_TABLE_STUDENT = "CREATE TABLE " + STUDENTS_TABLE
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_STUDENT_ID + " TEXT" +")";
 
-    // todo_tag table create statement
-    private static final String CREATE_TABLE_COMPLETED_COURSES = "CREATE TABLE IF NOT EXISTS "
+
+    private static final String CREATE_TABLE_COMPLETED_COURSES = "CREATE TABLE "
             + COMPLETED_COURSES_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_COMPLETED_COURSES_ID + " INTEGER, " + KEY_STUDENTID + " INTEGER" + ")";
+            + KEY_COMPLETED_COURSES_ID + " INTEGER, " + KEY_STUDENTID + " INTEGER" +  KEY_STATUS  + " TEXT" +")";
+
+    private static final String CREATE_TABLE_STUDENT_COURSES = "CREATE TABLE "
+            + STUDENT_COURSES_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_STUDENT_ID + " TEXT, " + KEY_COURSE_ID + " TEXT, " +  KEY_STATUS  + " TEXT" +")";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context) {
@@ -78,6 +85,9 @@ public class CoursesDbAdapter {
 
             Log.w(TAG, CREATE_TABLE_COMPLETED_COURSES);
             db.execSQL(CREATE_TABLE_COMPLETED_COURSES);
+
+            Log.w(TAG, CREATE_TABLE_STUDENT_COURSES);
+            db.execSQL(CREATE_TABLE_STUDENT_COURSES);
         }
 
         @Override
@@ -87,6 +97,8 @@ public class CoursesDbAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + STUDENTS_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + COURSES_TABLE);
             db.execSQL("DROP TABLE IF EXISTS " + COMPLETED_COURSES_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + STUDENT_COURSES_TABLE);
+
             onCreate(db);
         }
     }
@@ -174,7 +186,47 @@ public class CoursesDbAdapter {
         return courses;
     }
 
+    public long createStudentCourse(String student_id, String course_id, String status){
+        ContentValues values = new ContentValues();
+        values.put(KEY_STUDENT_ID, student_id);
+        values.put(KEY_COURSE_ID, course_id);
+        values.put(KEY_STATUS, status);
 
+        long id =  mDb.insert(STUDENT_COURSES_TABLE, null, values);
+        return id;
+    }
+
+    public List<StudentCourse> testCoursesForSpecificStudent(String student_id) {
+        List<StudentCourse> courses = new ArrayList<StudentCourse>();
+
+        String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
+                + KEY_STUDENT_ID + " = '" + student_id + "' " ;
+
+
+
+        Log.e(TAG, selectQuery);
+
+        //SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = mDb.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                StudentCourse course = new StudentCourse();
+                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                course.setSid((c.getString(c.getColumnIndex(KEY_STUDENT_ID))));
+                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+
+                // adding to courses taken list
+                courses.add(course);
+            } while (c.moveToNext());
+        }
+
+        //mDb.close();
+        //c.close();
+        return courses;
+    }
 
     public long createCourse(String course_id, String taken) {
         ContentValues values = new ContentValues();
@@ -191,11 +243,20 @@ public class CoursesDbAdapter {
         return mDb.insert(STUDENTS_TABLE, null, values);
     }
 
-    public long addCourseToStudentsSchedule(long course_id, long student_id) {
+    public boolean updateItem(long rowId, String status) {
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_STATUS, status);
+
+        return mDb.update(STUDENT_COURSES_TABLE, values, KEY_ID + "=" + rowId, null) > 0;
+    }
+
+    public long addCourseToStudentsSchedule(long course_id, long student_id, String taken) {
 
         ContentValues values = new ContentValues();
         values.put(KEY_COMPLETED_COURSES_ID, course_id);
         values.put(KEY_STUDENTID, student_id);
+        values.put(KEY_STATUS, taken);
         Log.w(TAG, String.valueOf(values));
 
         return mDb.insert(COMPLETED_COURSES_TABLE, null, values);
@@ -206,6 +267,13 @@ public class CoursesDbAdapter {
     public boolean deleteAllCourses(){
         int doneDelete = 0;
         doneDelete = mDb.delete(COURSES_TABLE, null, null);
+        Log.w(TAG, Integer.toString(doneDelete));
+        return doneDelete > 0;
+    }
+
+    public boolean deleteAllStudentCourses(){
+        int doneDelete = 0;
+        doneDelete = mDb.delete(STUDENT_COURSES_TABLE, null, null);
         Log.w(TAG, Integer.toString(doneDelete));
         return doneDelete > 0;
     }
@@ -229,6 +297,27 @@ public class CoursesDbAdapter {
         return mCursor;
     }
 
+    public Cursor fetchAllStudentCourses(String inputText) {
+
+        Cursor mCursor = null;
+        if (inputText == null  ||  inputText.length () == 0)  {
+            mCursor = mDb.query(STUDENT_COURSES_TABLE, new String[] {KEY_ID,
+                            KEY_STUDENT_ID, KEY_COURSE_ID, KEY_STATUS},
+                    null, null, null, null, null);
+
+        }
+        else {
+            mCursor = mDb.query(true, STUDENT_COURSES_TABLE, new String[] {KEY_ID,
+                            KEY_STUDENT_ID, KEY_COURSE_ID, KEY_STATUS},
+                    KEY_STUDENT_ID + " like '%" + inputText + "%'", null,
+                    null, null, null, null);
+        }
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
     public Cursor fetchCourseByCourseId(String inputText) throws SQLException {
         Log.w(TAG, inputText);
         Cursor mCursor = null;
@@ -241,6 +330,28 @@ public class CoursesDbAdapter {
         else {
             mCursor = mDb.query(true, COURSES_TABLE, new String[] {KEY_ID,
                             KEY_COURSE_ID, KEY_STATUS},
+                    KEY_COURSE_ID + " like '%" + inputText + "%'", null,
+                    null, null, null, null);
+        }
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
+    }
+
+    public Cursor fetchStudentCourseByCourseId(String inputText) throws SQLException {
+        Log.w(TAG, inputText);
+        Cursor mCursor = null;
+        if (inputText == null  ||  inputText.length () == 0)  {
+            mCursor = mDb.query(STUDENT_COURSES_TABLE, new String[] {KEY_ID,
+                            KEY_STUDENT_ID, KEY_COURSE_ID, KEY_STATUS},
+                    null, null, null, null, null);
+
+        }
+        else {
+            mCursor = mDb.query(true, STUDENT_COURSES_TABLE, new String[] {KEY_ID,
+                            KEY_STUDENT_ID, KEY_COURSE_ID, KEY_STATUS},
                     KEY_COURSE_ID + " like '%" + inputText + "%'", null,
                     null, null, null, null);
         }
@@ -285,6 +396,16 @@ public class CoursesDbAdapter {
         createCourse("CSC106", "false");
         createCourse("CSC107", "false");
 
+    }
+
+    public void insertStudentCourses(String studentId){
+        createStudentCourse(studentId, "CSC101", "false");
+        createStudentCourse(studentId, "CSC102", "false");
+        createStudentCourse(studentId, "CSC103", "false");
+        createStudentCourse(studentId, "CSC104", "false");
+        createStudentCourse(studentId, "CSC105", "false");
+        createStudentCourse(studentId, "CSC106", "false");
+        createStudentCourse(studentId, "CSC107", "false");
     }
 }
 
