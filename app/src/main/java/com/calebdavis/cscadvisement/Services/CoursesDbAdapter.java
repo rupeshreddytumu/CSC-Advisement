@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.calebdavis.cscadvisement.SQLiteTableClasses.Courses;
 import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
 
 import java.util.ArrayList;
@@ -120,108 +119,6 @@ public class CoursesDbAdapter {
          }
     }
 
-    public Cursor fetchStudent(String inputText) throws SQLException {
-        Log.w(TAG, inputText);
-        Cursor mCursor = null;
-        if (inputText == null  ||  inputText.length () == 0)  {
-            mCursor = mDb.query(STUDENTS_TABLE, new String[] {KEY_ID,
-                            KEY_STUDENT_ID},
-                    null, null, null, null, null);
-
-        }
-        else {
-            mCursor = mDb.query(true, STUDENTS_TABLE, new String[] {KEY_ID,
-                            KEY_STUDENT_ID},
-                    KEY_STUDENT_ID + " like '%" + inputText + "%'", null,
-                    null, null, null, null);
-        }
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
-
-    public Cursor fetchAllStudents() {
-
-        Cursor mCursor = mDb.query(STUDENTS_TABLE, new String[] {KEY_ID,
-                        KEY_STUDENT_ID},
-                null, null, null, null, null);
-
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-    }
-
-    public List<Courses> getAllCoursesByStudent(String student_id) {
-        List<Courses> courses = new ArrayList<Courses>();
-
-        String selectQuery = "SELECT * FROM " + COURSES_TABLE + " td, "
-                + STUDENTS_TABLE + " tg, " + COMPLETED_COURSES_TABLE + " tt WHERE tg."
-                + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND tg." + KEY_ID
-                + " = " + "tt." + KEY_STUDENTID + " AND td." + KEY_ID + " = "
-                + "tt." + KEY_COMPLETED_COURSES_ID;
-
-
-        Log.e(TAG, selectQuery);
-
-        //SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = mDb.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                Courses course = new Courses();
-                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
-                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
-
-                // adding to courses taken list
-                courses.add(course);
-            } while (c.moveToNext());
-        }
-
-        //mDb.close();
-        //c.close();
-        return courses;
-    }
-
-
-    public List<StudentCourse> getAllCoursesTakenByStudent(String student_id, String notTaken) {
-        List<StudentCourse> courses = new ArrayList<StudentCourse>();
-
-        String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
-                + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND " + KEY_STATUS
-                + " = '" + notTaken + "'";
-
-
-        Log.e(TAG, selectQuery);
-
-        //SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = mDb.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                StudentCourse course = new StudentCourse();
-                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                course.setSid(c.getString(c.getColumnIndex(KEY_STUDENT_ID)));
-                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
-                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
-
-                // adding to courses taken list
-                courses.add(course);
-            } while (c.moveToNext());
-        }
-
-        //mDb.close();
-        //c.close();
-        return courses;
-    }
-
-
-
     public List<StudentCourse> getAllCoursesNotTakenByStudent(String student_id, String notTaken) {
         List<StudentCourse> courses = new ArrayList<StudentCourse>();
 
@@ -243,6 +140,9 @@ public class CoursesDbAdapter {
                 course.setSid(c.getString(c.getColumnIndex(KEY_STUDENT_ID)));
                 course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+                course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+                course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
+
 
                 // adding to courses taken list
                 courses.add(course);
@@ -256,7 +156,6 @@ public class CoursesDbAdapter {
 
     public List<StudentCourse> getAllFallCoursesNotTakenByStudent(String student_id, String notTaken, String fall) {
         List<StudentCourse> courses = new ArrayList<StudentCourse>();
-
 
         String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
                 + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND " + KEY_STATUS
@@ -324,8 +223,6 @@ public class CoursesDbAdapter {
         return courses;
     }
 
-
-
     public long createStudentCourse(String student_id, String course_id, String status, String semester, int code){
         ContentValues values = new ContentValues();
         values.put(KEY_STUDENT_ID, student_id);
@@ -336,6 +233,13 @@ public class CoursesDbAdapter {
 
         long id =  mDb.insert(STUDENT_COURSES_TABLE, null, values);
         return id;
+    }
+
+    public long createStudent(String student_id) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_STUDENT_ID, student_id);
+
+        return mDb.insert(STUDENTS_TABLE, null, values);
     }
 
     public List<StudentCourse> testCoursesForSpecificStudent(String student_id) {
@@ -359,6 +263,8 @@ public class CoursesDbAdapter {
                 course.setSid((c.getString(c.getColumnIndex(KEY_STUDENT_ID))));
                 course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+                course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
 
                 // adding to courses taken list
                 courses.add(course);
@@ -378,46 +284,12 @@ public class CoursesDbAdapter {
         return mDb.insert(COURSES_TABLE, null, values);
     }
 
-    public long createStudent(String student_id) {
-        ContentValues values = new ContentValues();
-        values.put(KEY_STUDENT_ID, student_id);
-
-        return mDb.insert(STUDENTS_TABLE, null, values);
-    }
-
-    public void update_byID(int id, String status, String course_id){
-        ContentValues values = new ContentValues();
-        values.put(KEY_STATUS, status);
-        values.put(KEY_COURSE_ID, course_id);
-        mDb.update(STUDENT_COURSES_TABLE, values, KEY_ID + "=" + id, null);
-    }
-
     public boolean updateItem(long row_id, String status) {
         ContentValues values = new ContentValues();
         values.put(KEY_STATUS, status);
 
 
         return mDb.update(STUDENT_COURSES_TABLE, values, KEY_ID + "=" + row_id, null) > 0;
-    }
-
-    public long addCourseToStudentsSchedule(long course_id, long student_id, String taken) {
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_COMPLETED_COURSES_ID, course_id);
-        values.put(KEY_STUDENTID, student_id);
-        values.put(KEY_STATUS, taken);
-        Log.w(TAG, String.valueOf(values));
-
-        return mDb.insert(COMPLETED_COURSES_TABLE, null, values);
-    }
-
-
-
-    public boolean deleteAllCourses(){
-        int doneDelete = 0;
-        doneDelete = mDb.delete(COURSES_TABLE, null, null);
-        Log.w(TAG, Integer.toString(doneDelete));
-        return doneDelete > 0;
     }
 
     public boolean deleteAllStudentCourses(){
@@ -427,24 +299,7 @@ public class CoursesDbAdapter {
         return doneDelete > 0;
     }
 
-    public boolean deleteAllCompletedCourses(){
-        int doneDelete = 0;
-        doneDelete = mDb.delete(COMPLETED_COURSES_TABLE, null, null);
-        Log.w(TAG, Integer.toString(doneDelete));
-        return doneDelete > 0;
-    }
 
-    public Cursor fetchAllCourses() {
-
-        Cursor mCursor = mDb.query(COURSES_TABLE, new String[] {KEY_ID,
-                        KEY_COURSE_ID, KEY_STATUS},
-                null, null, null, null, null);
-
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-    }
 
     public Cursor fetchAllStudentCourses(String inputText) {
 
@@ -467,114 +322,26 @@ public class CoursesDbAdapter {
         return mCursor;
     }
 
-    public Cursor fetchAllStudentCourseNotTaken(String inputText) throws SQLException {
-        Log.w(TAG, inputText);
-        Cursor mCursor = null;
-        if (inputText == null  ||  inputText.length () == 0)  {
-            mCursor = mDb.query(STUDENT_COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_COURSE_ID, KEY_STATUS},
-                    null, null, null, null, null);
-
-        }
-        else {
-            mCursor = mDb.query(true, STUDENT_COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_COURSE_ID, KEY_STATUS},
-                    KEY_STATUS + " like '%" + inputText + "%'", null,
-                    null, null, null, null);
-        }
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
-
-    public Cursor fetchCourseByCourseId(String inputText) throws SQLException {
-        Log.w(TAG, inputText);
-        Cursor mCursor = null;
-        if (inputText == null  ||  inputText.length () == 0)  {
-            mCursor = mDb.query(COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_COURSE_ID, KEY_STATUS},
-                    null, null, null, null, null);
-
-        }
-        else {
-            mCursor = mDb.query(true, COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_COURSE_ID, KEY_STATUS},
-                    KEY_COURSE_ID + " like '%" + inputText + "%'", null,
-                    null, null, null, null);
-        }
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
-
-    public Cursor fetchStudentCourseByCourseId(String inputText) throws SQLException {
-        Log.w(TAG, inputText);
-        Cursor mCursor = null;
-        if (inputText == null  ||  inputText.length () == 0)  {
-            mCursor = mDb.query(STUDENT_COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_STUDENT_ID, KEY_COURSE_ID, KEY_STATUS},
-                    null, null, null, null, null);
-
-        }
-        else {
-            mCursor = mDb.query(true, STUDENT_COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_STUDENT_ID, KEY_COURSE_ID, KEY_STATUS},
-                    KEY_COURSE_ID + " like '%" + inputText + "%'", null,
-                    null, null, null, null);
-        }
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
-
-
-
-    public Cursor fetchCoursesByRowId(long row_id) throws SQLException {
-        Log.w(TAG, String.valueOf(row_id));
-        Cursor mCursor = null;
-        if (row_id == 0)  {
-            mCursor = mDb.query(COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_COURSE_ID, KEY_STATUS},
-                    null, null, null, null, null);
-
-        }
-        else {
-            mCursor = mDb.query(true, COURSES_TABLE, new String[] {KEY_ID,
-                            KEY_COURSE_ID, KEY_STATUS},
-                    KEY_ID + " like '%" + row_id + "%'", null,
-                    null, null, null, null);
-        }
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-
-    }
-
-
-
     public void insertStudentCourses(String studentId){
-        createStudentCourse(studentId, "CSC101 - Intro to Programming", "false", "both" , 101);
-        createStudentCourse(studentId, "CSC102 - Advanced Computer Programming", "false", "both", 102);
-        createStudentCourse(studentId, "CSC203 - Intro to Computer Systems", "false", "fall", 203);
-        createStudentCourse(studentId, "CSC204 - Computer Organizations", "false", "spring", 204);
-        createStudentCourse(studentId, "CSC306 - Operating Systems", "false", "fall", 306);
-        createStudentCourse(studentId, "CSC307 - Data Structures", "false", "both", 307);
-        createStudentCourse(studentId, "CSC317 - Object Oriented Programming", "false", "spring", 317);
-        createStudentCourse(studentId, "CSC320 - Intro to Linear Programming", "false", "fall", 320);
-        createStudentCourse(studentId, "CSC408 - Organization of Programming Languages", "false", "fall", 408);
-        createStudentCourse(studentId, "CSC411 - Relational Database Management Systems", "false", "fall", 411);
-        createStudentCourse(studentId, "CSC412 - Intro to Artificial Intelligence", "false", "spring", 412);
-        createStudentCourse(studentId, "CSC413 - Algorithms", "false", "fall", 413);
-        createStudentCourse(studentId, "CSC414 - Software Design and Development", "false", "fall", 414);
-        createStudentCourse(studentId, "CSC415 - Theory of Programming Languages", "false", "spring", 415);
-        createStudentCourse(studentId, "CSC424 - Software Engineering II", "false", "spring", 424);
+
+
+        createStudentCourse(studentId, "CSC 101 - Intro to Programming", "false", "both" , 101);
+        createStudentCourse(studentId, "CSC 102 - Advanced Computer Programming", "false", "both", 102);
+        createStudentCourse(studentId, "CSC 203 - Intro to Computer Systems", "false", "fall", 203);
+        createStudentCourse(studentId, "CSC 204 - Computer Organizations", "false", "spring", 204);
+        createStudentCourse(studentId, "CSC 300 - Discrete Math", "false", "fall", 300);
+        createStudentCourse(studentId, "CSC 306 - Operating Systems", "false", "fall", 306);
+        createStudentCourse(studentId, "CSC 307 - Data Structures", "false", "both", 307);
+        createStudentCourse(studentId, "CSC 309 - Computers and Society", "false", "both", 309);
+        createStudentCourse(studentId, "CSC 317 - Object Oriented Programming", "false", "spring", 317);
+        createStudentCourse(studentId, "CSC 320 - Intro to Linear Programming", "false", "fall", 320);
+        createStudentCourse(studentId, "CSC 408 - Organization of Programming Languages", "false", "fall", 408);
+        createStudentCourse(studentId, "CSC 411 - Relational Database Management Systems", "false", "fall", 411);
+        createStudentCourse(studentId, "CSC 412 - Intro to Artificial Intelligence", "false", "spring", 412);
+        createStudentCourse(studentId, "CSC 413 - Algorithms", "false", "fall", 413);
+        createStudentCourse(studentId, "CSC 414 - Software Design and Development", "false", "fall", 414);
+        createStudentCourse(studentId, "CSC 415 - Theory of Programming Languages", "false", "spring", 415);
+        createStudentCourse(studentId, "CSC 424 - Software Engineering II", "false", "spring", 424);
+
     }
 }
-

@@ -89,6 +89,13 @@ public class RegisterActivity extends Activity{
             return true;
         }
 
+        if (id == R.id.get_advised){
+            // show courses taken
+            Intent intent = new Intent(this, GenerateSchedule.class);
+            startActivity(intent);
+            finish();
+        }
+
         if (id == R.id.logout){
             ParseUser.logOut();
             finish();

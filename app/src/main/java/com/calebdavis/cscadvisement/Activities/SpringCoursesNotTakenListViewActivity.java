@@ -119,6 +119,13 @@ public class SpringCoursesNotTakenListViewActivity extends Activity {
             startActivity(intent);
             finish();
         }
+
+        if (id == R.id.get_advised){
+            // show courses taken
+            Intent intent = new Intent(this, GenerateSchedule.class);
+            startActivity(intent);
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 }

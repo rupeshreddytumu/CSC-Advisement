@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
 import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
@@ -17,49 +14,65 @@ import com.calebdavis.cscadvisement.Services.MyCustomBaseAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 
 /**
- * Created by Caleb Davis on 5/4/15.
+ * Created by user on 5/4/15.
  */
-public class CoursesNotTakenListViewActivity extends Activity {
-
+public class GenerateSchedule extends Activity {
     private CoursesDbAdapter dbHelper;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.courses);
+
         dbHelper = new CoursesDbAdapter(this);
         dbHelper.open();
 
         ArrayList<StudentCourse> searchResults = GetSearchResults();
-
         final ListView lv1 = (ListView) findViewById(R.id.coursesListView);
         lv1.setAdapter(new MyCustomBaseAdapter(this, searchResults));
 
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lv1.getItemAtPosition(position);
-                StudentCourse fullObject = (StudentCourse)o;
-                Toast.makeText(CoursesNotTakenListViewActivity.this, "You have chosen: " + " " + fullObject.getCourseId(), Toast.LENGTH_LONG).show();
-            }
-        });
+
     }
 
     private ArrayList<StudentCourse> GetSearchResults(){
         ArrayList<StudentCourse> results = new ArrayList<StudentCourse>();
+        ArrayList<StudentCourse> new_results = new ArrayList<StudentCourse>();
+        ArrayList<StudentCourse> final_results = new ArrayList<StudentCourse>();
+        ArrayList<StudentCourse> schedule = new ArrayList<StudentCourse>();
+
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         String student_id = currentUser.getUsername().toString();
 
-        results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "false");
-        //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "fall");
-        //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
+        Calendar c = Calendar.getInstance();
+        int month = c.get(Calendar.MONTH);
 
-        Collections.sort(results);
+        if (month < 6){
+            // spring semester - > generate schedule for fall semester
+            results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "fall");
+            new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "both");
+        }
 
-        return results;
+        if (month > 7){
+            // fall semester - > generate schedule for spring semester
+            results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
+            new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "both");
+        }
+
+        final_results.addAll(new_results);
+        final_results.addAll(results);
+
+        Collections.sort(final_results);
+
+        for (int i =0; i < 5; i++){
+            schedule.add(final_results.get(i));
+        }
+
+        return schedule;
     }
 
     @Override

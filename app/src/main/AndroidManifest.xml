@@ -26,6 +26,12 @@
             android:label="CSC Degree Plan" >
         </activity>
 
+        <activity
+            android:name=".Activities.GenerateSchedule"
+            android:label="CSC Degree Plan" >
+        </activity>
+
+
         <activity android:name=".Activities.FallCoursesNotTakenListViewActivity"
             android:label="Incomplete Fall Courses">
         </activity>

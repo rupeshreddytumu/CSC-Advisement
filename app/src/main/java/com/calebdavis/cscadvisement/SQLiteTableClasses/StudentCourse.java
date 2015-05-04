@@ -3,7 +3,7 @@ package com.calebdavis.cscadvisement.SQLiteTableClasses;
 /**
  * Created by user on 4/30/15.
  */
-public class StudentCourse {
+public class StudentCourse implements Comparable{
     String sid;
     String cid;
     String taken;
@@ -59,4 +59,9 @@ public class StudentCourse {
     public int getCode() {return code;}
     public void setCode(int code) { this.code = code;}
 
+    @Override
+    public int compareTo(Object another) {
+        int compare_course_number = ((StudentCourse)another).getCode();
+        return this.code-compare_course_number;
+    }
 }

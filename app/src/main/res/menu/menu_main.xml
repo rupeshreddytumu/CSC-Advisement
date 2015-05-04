@@ -19,6 +19,9 @@
     <item android:id="@+id/spring_courses_not_taken" android:title="Spring Courses Not Taken"
         android:orderInCategory="100" app:showAsAction="never" />
 
+    <item android:id="@+id/get_advised" android:title="Get Advised"
+        android:orderInCategory="100" app:showAsAction="never" />
+
     <item android:id="@+id/logout" android:title="Logout"
         android:orderInCategory="100" app:showAsAction="never" />
 
