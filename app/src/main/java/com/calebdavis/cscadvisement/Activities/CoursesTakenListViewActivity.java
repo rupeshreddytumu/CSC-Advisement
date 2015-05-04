@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
-import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
+import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
 import com.calebdavis.cscadvisement.Services.MyCustomBaseAdapter;
 import com.parse.ParseUser;
 

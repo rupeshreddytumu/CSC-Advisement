@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.calebdavis.cscadvisement.SQLiteProject.Courses;
-import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
+import com.calebdavis.cscadvisement.SQLiteTableClasses.Courses;
+import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
 
 import java.util.ArrayList;
 import java.util.List;

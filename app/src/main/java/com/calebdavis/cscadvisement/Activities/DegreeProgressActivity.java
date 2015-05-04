@@ -13,7 +13,7 @@ import android.widget.SimpleCursorAdapter;
 
 import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
-import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
+import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
 import com.parse.ParseUser;
 
 import java.util.List;

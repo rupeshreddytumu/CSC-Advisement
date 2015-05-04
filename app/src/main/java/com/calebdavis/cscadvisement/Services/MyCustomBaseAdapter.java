@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.calebdavis.cscadvisement.R;
-import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
+import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
 
 import java.util.ArrayList;
 
