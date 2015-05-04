@@ -100,6 +100,20 @@ public class WelcomeActivity extends Activity {
             finish();
         }
 
+        if (id == R.id.fall_courses_not_taken){
+            // show courses taken
+            Intent intent = new Intent(this, FallCoursesNotTakenListViewActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        if (id == R.id.spring_courses_not_taken){
+            // show courses taken
+            Intent intent = new Intent(this, SpringCoursesNotTakenListViewActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

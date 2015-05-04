@@ -23,9 +23,10 @@ public class CoursesDbAdapter {
     // COURSES Table - column names
     public static final String KEY_COURSE_ID = "course_id";
     public static final String KEY_STATUS = "status";
-
-    // STUDENTS Table - column names
     public static final String KEY_STUDENT_ID = "student_id";
+    public static final String KEY_SEMESTER = "semester";
+    public static final String KEY_CODE = "code";
+
 
 
     // COMPLETED_COURSES Table - column names
@@ -68,7 +69,7 @@ public class CoursesDbAdapter {
 
     private static final String CREATE_TABLE_STUDENT_COURSES = "CREATE TABLE "
             + STUDENT_COURSES_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_STUDENT_ID + " TEXT, " + KEY_COURSE_ID + " TEXT, " +  KEY_STATUS  + " TEXT" +")";
+            + KEY_STUDENT_ID + " TEXT, " + KEY_COURSE_ID + " TEXT, " +  KEY_STATUS  + " TEXT, " + KEY_SEMESTER + " TEXT, " + KEY_CODE + " INTEGER" +  ")";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context) {
@@ -253,11 +254,85 @@ public class CoursesDbAdapter {
         return courses;
     }
 
-    public long createStudentCourse(String student_id, String course_id, String status){
+    public List<StudentCourse> getAllFallCoursesNotTakenByStudent(String student_id, String notTaken, String fall) {
+        List<StudentCourse> courses = new ArrayList<StudentCourse>();
+
+
+        String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
+                + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND " + KEY_STATUS
+                + " = '" + notTaken + "'" + " AND " + KEY_SEMESTER + " = '" + fall + "'";
+
+
+        Log.e(TAG, selectQuery);
+
+        //SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = mDb.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                StudentCourse course = new StudentCourse();
+                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                course.setSid(c.getString(c.getColumnIndex(KEY_STUDENT_ID)));
+                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+                course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
+                course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+
+                // adding to courses taken list
+                courses.add(course);
+            } while (c.moveToNext());
+        }
+
+        //mDb.close();
+        //c.close();
+        return courses;
+    }
+
+    public List<StudentCourse> getAllBothSemesterCoursesNotTakenByStudent(String student_id, String notTaken, String both) {
+        List<StudentCourse> courses = new ArrayList<StudentCourse>();
+
+
+        String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
+                + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND " + KEY_STATUS
+                + " = '" + notTaken + "'" + " AND " + KEY_SEMESTER + " = '" + both + "'" ;
+
+
+        Log.e(TAG, selectQuery);
+
+        //SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = mDb.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                StudentCourse course = new StudentCourse();
+                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                course.setSid(c.getString(c.getColumnIndex(KEY_STUDENT_ID)));
+                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+                course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
+                course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+
+                // adding to courses taken list
+                courses.add(course);
+            } while (c.moveToNext());
+        }
+
+        //mDb.close();
+        //c.close();
+        return courses;
+    }
+
+
+
+    public long createStudentCourse(String student_id, String course_id, String status, String semester, int code){
         ContentValues values = new ContentValues();
         values.put(KEY_STUDENT_ID, student_id);
         values.put(KEY_COURSE_ID, course_id);
         values.put(KEY_STATUS, status);
+        values.put(KEY_SEMESTER, semester);
+        values.put(KEY_CODE, code);
 
         long id =  mDb.insert(STUDENT_COURSES_TABLE, null, values);
         return id;
@@ -485,21 +560,21 @@ public class CoursesDbAdapter {
 
 
     public void insertStudentCourses(String studentId){
-        createStudentCourse(studentId, "CSC101 - Intro to Programming", "false");
-        createStudentCourse(studentId, "CSC102 - Advanced Computer Programming", "false");
-        createStudentCourse(studentId, "CSC203 - Intro to Computer Systems", "false");
-        createStudentCourse(studentId, "CSC204 - Computer Organizations", "false");
-        createStudentCourse(studentId, "CSC306 - Operating Systems", "false");
-        createStudentCourse(studentId, "CSC307 - Data Structures", "false");
-        createStudentCourse(studentId, "CSC317 - Object Oriented Programming", "false");
-        createStudentCourse(studentId, "CSC320 - Intro to Linear Programming", "false");
-        createStudentCourse(studentId, "CSC408 - Organization of Programming Languages", "false");
-        createStudentCourse(studentId, "CSC411 - Relational Database Management Systems", "false");
-        createStudentCourse(studentId, "CSC412 - Intro to Artificial Intelligence", "false");
-        createStudentCourse(studentId, "CSC413 - Algorithms", "false");
-        createStudentCourse(studentId, "CSC414 - Software Design and Development", "false");
-        createStudentCourse(studentId, "CSC415 - Theory of Programming Languages", "false");
-        createStudentCourse(studentId, "CSC424 - Software Engineering II", "false");
+        createStudentCourse(studentId, "CSC101 - Intro to Programming", "false", "both" , 101);
+        createStudentCourse(studentId, "CSC102 - Advanced Computer Programming", "false", "both", 102);
+        createStudentCourse(studentId, "CSC203 - Intro to Computer Systems", "false", "fall", 203);
+        createStudentCourse(studentId, "CSC204 - Computer Organizations", "false", "spring", 204);
+        createStudentCourse(studentId, "CSC306 - Operating Systems", "false", "fall", 306);
+        createStudentCourse(studentId, "CSC307 - Data Structures", "false", "both", 307);
+        createStudentCourse(studentId, "CSC317 - Object Oriented Programming", "false", "spring", 317);
+        createStudentCourse(studentId, "CSC320 - Intro to Linear Programming", "false", "fall", 320);
+        createStudentCourse(studentId, "CSC408 - Organization of Programming Languages", "false", "fall", 408);
+        createStudentCourse(studentId, "CSC411 - Relational Database Management Systems", "false", "fall", 411);
+        createStudentCourse(studentId, "CSC412 - Intro to Artificial Intelligence", "false", "spring", 412);
+        createStudentCourse(studentId, "CSC413 - Algorithms", "false", "fall", 413);
+        createStudentCourse(studentId, "CSC414 - Software Design and Development", "false", "fall", 414);
+        createStudentCourse(studentId, "CSC415 - Theory of Programming Languages", "false", "spring", 415);
+        createStudentCourse(studentId, "CSC424 - Software Engineering II", "false", "spring", 424);
     }
 }
 

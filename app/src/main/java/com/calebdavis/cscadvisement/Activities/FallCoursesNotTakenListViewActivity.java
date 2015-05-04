@@ -10,9 +10,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
 import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
+import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.Services.MyCustomBaseAdapter;
 import com.parse.ParseUser;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by Caleb Davis on 5/4/15.
  */
-public class CoursesNotTakenListViewActivity extends Activity {
+public class FallCoursesNotTakenListViewActivity extends Activity {
 
     private CoursesDbAdapter dbHelper;
     @Override
@@ -41,22 +41,29 @@ public class CoursesNotTakenListViewActivity extends Activity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = lv1.getItemAtPosition(position);
                 StudentCourse fullObject = (StudentCourse)o;
-                Toast.makeText(CoursesNotTakenListViewActivity.this, "You have chosen: " + " " + fullObject.getCourseId(), Toast.LENGTH_LONG).show();
+                Toast.makeText(FallCoursesNotTakenListViewActivity.this, "You have chosen: " + " " + fullObject.getCourseId(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private ArrayList<StudentCourse> GetSearchResults(){
         ArrayList<StudentCourse> results = new ArrayList<StudentCourse>();
+        ArrayList<StudentCourse> new_results = new ArrayList<StudentCourse>();
+        ArrayList<StudentCourse> final_results = new ArrayList<StudentCourse>();
+
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         String student_id = currentUser.getUsername().toString();
 
-        results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "false");
-        //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "fall");
+        //results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "false");
+        results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "fall");
+        new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "both");
         //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
 
-        return results;
+        final_results.addAll(new_results);
+        final_results.addAll(results);
+
+        return final_results;
     }
 
     @Override
@@ -113,5 +120,4 @@ public class CoursesNotTakenListViewActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
