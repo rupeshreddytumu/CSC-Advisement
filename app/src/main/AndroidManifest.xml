@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
-        android:name=".DatabaseHelpers.LoginSystem">
+        android:name=".Services.LoginSystem">
 
 
         <activity
@@ -22,8 +22,18 @@
 
 
         <activity
-            android:name=".Services.CoursesTaken"
-            android:label="Courses" >
+            android:name=".Activities.DegreeProgressActivity"
+            android:label="CSC Degree Plan" >
+        </activity>
+
+        <activity
+            android:name=".Activities.CoursesNotTakenListViewActivity"
+            android:label="Courses Not Taken" >
+        </activity>
+
+        <activity
+            android:name=".Activities.CoursesTakenListViewActivity"
+            android:label="Courses Taken" >
         </activity>
 
         <activity

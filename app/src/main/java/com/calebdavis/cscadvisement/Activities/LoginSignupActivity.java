@@ -1,7 +1,7 @@
 package com.calebdavis.cscadvisement.Activities;
 
 /**
- * Created by user on 4/21/15.
+ * Created by Caleb Davis on 4/21/15.
  */
 
 import android.app.Activity;

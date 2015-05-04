@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.calebdavis.cscadvisement.R;
-import com.calebdavis.cscadvisement.Services.CoursesTaken;
 import com.parse.ParseUser;
 
 public class WelcomeActivity extends Activity {
@@ -70,7 +69,7 @@ public class WelcomeActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.profile) {
             return true;
         }
 
@@ -82,7 +81,21 @@ public class WelcomeActivity extends Activity {
 
         if (id == R.id.courses){
             // show courses taken
-            Intent intent = new Intent(this, CoursesTaken.class);
+            Intent intent = new Intent(this, DegreeProgressActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        if (id == R.id.not_courses){
+            // show courses taken
+            Intent intent = new Intent(this, CoursesNotTakenListViewActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        if (id == R.id.courses_taken){
+            // show courses taken
+            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
             startActivity(intent);
             finish();
         }

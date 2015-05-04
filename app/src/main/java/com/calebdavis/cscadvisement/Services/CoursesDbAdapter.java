@@ -1,4 +1,4 @@
-package com.calebdavis.cscadvisement.DatabaseHelpers;
+package com.calebdavis.cscadvisement.Services;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -186,6 +186,73 @@ public class CoursesDbAdapter {
         return courses;
     }
 
+
+    public List<StudentCourse> getAllCoursesTakenByStudent(String student_id, String notTaken) {
+        List<StudentCourse> courses = new ArrayList<StudentCourse>();
+
+        String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
+                + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND " + KEY_STATUS
+                + " = '" + notTaken + "'";
+
+
+        Log.e(TAG, selectQuery);
+
+        //SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = mDb.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                StudentCourse course = new StudentCourse();
+                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                course.setSid(c.getString(c.getColumnIndex(KEY_STUDENT_ID)));
+                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+
+                // adding to courses taken list
+                courses.add(course);
+            } while (c.moveToNext());
+        }
+
+        //mDb.close();
+        //c.close();
+        return courses;
+    }
+
+
+
+    public List<StudentCourse> getAllCoursesNotTakenByStudent(String student_id, String notTaken) {
+        List<StudentCourse> courses = new ArrayList<StudentCourse>();
+
+        String selectQuery = "SELECT * FROM " + STUDENT_COURSES_TABLE + " WHERE "
+                + KEY_STUDENT_ID + " = '" + student_id + "'" + " AND " + KEY_STATUS
+                + " = '" + notTaken + "'";
+
+
+        Log.e(TAG, selectQuery);
+
+        //SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = mDb.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                StudentCourse course = new StudentCourse();
+                course.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                course.setSid(c.getString(c.getColumnIndex(KEY_STUDENT_ID)));
+                course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
+                course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
+
+                // adding to courses taken list
+                courses.add(course);
+            } while (c.moveToNext());
+        }
+
+        //mDb.close();
+        //c.close();
+        return courses;
+    }
+
     public long createStudentCourse(String student_id, String course_id, String status){
         ContentValues values = new ContentValues();
         values.put(KEY_STUDENT_ID, student_id);
@@ -325,6 +392,28 @@ public class CoursesDbAdapter {
         return mCursor;
     }
 
+    public Cursor fetchAllStudentCourseNotTaken(String inputText) throws SQLException {
+        Log.w(TAG, inputText);
+        Cursor mCursor = null;
+        if (inputText == null  ||  inputText.length () == 0)  {
+            mCursor = mDb.query(STUDENT_COURSES_TABLE, new String[] {KEY_ID,
+                            KEY_COURSE_ID, KEY_STATUS},
+                    null, null, null, null, null);
+
+        }
+        else {
+            mCursor = mDb.query(true, STUDENT_COURSES_TABLE, new String[] {KEY_ID,
+                            KEY_COURSE_ID, KEY_STATUS},
+                    KEY_STATUS + " like '%" + inputText + "%'", null,
+                    null, null, null, null);
+        }
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
+    }
+
     public Cursor fetchCourseByCourseId(String inputText) throws SQLException {
         Log.w(TAG, inputText);
         Cursor mCursor = null;
@@ -393,26 +482,24 @@ public class CoursesDbAdapter {
 
     }
 
-    public void insertInitialCourses() {
 
-        createCourse("CSC101", "false");
-        createCourse("CSC102", "false");
-        createCourse("CSC103", "false");
-        createCourse("CSC104", "false");
-        createCourse("CSC105", "false");
-        createCourse("CSC106", "false");
-        createCourse("CSC107", "false");
-
-    }
 
     public void insertStudentCourses(String studentId){
-        createStudentCourse(studentId, "CSC101", "false");
-        createStudentCourse(studentId, "CSC102", "false");
-        createStudentCourse(studentId, "CSC103", "false");
-        createStudentCourse(studentId, "CSC104", "false");
-        createStudentCourse(studentId, "CSC105", "false");
-        createStudentCourse(studentId, "CSC106", "false");
-        createStudentCourse(studentId, "CSC107", "false");
+        createStudentCourse(studentId, "CSC101 - Intro to Programming", "false");
+        createStudentCourse(studentId, "CSC102 - Advanced Computer Programming", "false");
+        createStudentCourse(studentId, "CSC203 - Intro to Computer Systems", "false");
+        createStudentCourse(studentId, "CSC204 - Computer Organizations", "false");
+        createStudentCourse(studentId, "CSC306 - Operating Systems", "false");
+        createStudentCourse(studentId, "CSC307 - Data Structures", "false");
+        createStudentCourse(studentId, "CSC317 - Object Oriented Programming", "false");
+        createStudentCourse(studentId, "CSC320 - Intro to Linear Programming", "false");
+        createStudentCourse(studentId, "CSC408 - Organization of Programming Languages", "false");
+        createStudentCourse(studentId, "CSC411 - Relational Database Management Systems", "false");
+        createStudentCourse(studentId, "CSC412 - Intro to Artificial Intelligence", "false");
+        createStudentCourse(studentId, "CSC413 - Algorithms", "false");
+        createStudentCourse(studentId, "CSC414 - Software Design and Development", "false");
+        createStudentCourse(studentId, "CSC415 - Theory of Programming Languages", "false");
+        createStudentCourse(studentId, "CSC424 - Software Engineering II", "false");
     }
 }
 

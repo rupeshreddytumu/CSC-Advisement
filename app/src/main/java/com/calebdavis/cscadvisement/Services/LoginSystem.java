@@ -1,4 +1,4 @@
-package com.calebdavis.cscadvisement.DatabaseHelpers;
+package com.calebdavis.cscadvisement.Services;
 
 /**
  * Created by Caleb Davis on 4/21/15.

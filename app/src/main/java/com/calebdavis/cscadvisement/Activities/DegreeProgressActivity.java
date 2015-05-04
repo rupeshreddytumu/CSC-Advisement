@@ -1,6 +1,7 @@
-package com.calebdavis.cscadvisement.Services;
+package com.calebdavis.cscadvisement.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import com.calebdavis.cscadvisement.DatabaseHelpers.CoursesDbAdapter;
+import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
 import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
 import com.parse.ParseUser;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * Created by Caleb Davis on 4/27/15.
  */
-public class CoursesTaken extends Activity {
+public class DegreeProgressActivity extends Activity {
 
     // Database Helper
     private CoursesDbAdapter dbHelper;
@@ -81,21 +82,27 @@ public class CoursesTaken extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.profile) {
             return true;
         }
 
         if (id == R.id.logout){
             ParseUser.logOut();
             finish();
-
         }
 
-        if (id == R.id.courses){
+        if (id == R.id.not_courses){
             // show courses taken
-            //Intent intent = new Intent(this, CoursesTakenActivity.class);
-            //startActivity(intent);
-            //finish();
+            Intent intent = new Intent(this, CoursesNotTakenListViewActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        if (id == R.id.courses_taken){
+            // show courses taken
+            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -104,6 +111,8 @@ public class CoursesTaken extends Activity {
     private void displayListView() {
         List<StudentCourse> test = dbHelper.testCoursesForSpecificStudent(user_id);
         Cursor cursor = dbHelper.fetchAllStudentCourses(user_id);
+        List<StudentCourse> coursesNotTaken = dbHelper.getAllCoursesNotTakenByStudent(user_id, "false");
+
         String student_id_test = cursor.getString(cursor.getColumnIndexOrThrow("student_id"));
         String course_id_test = cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
         final String status_test = cursor.getString(cursor.getColumnIndexOrThrow("status"));

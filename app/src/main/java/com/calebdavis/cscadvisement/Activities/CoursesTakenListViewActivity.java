@@ -6,69 +6,56 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.calebdavis.cscadvisement.R;
+import com.calebdavis.cscadvisement.SQLiteProject.StudentCourse;
+import com.calebdavis.cscadvisement.Services.MyCustomBaseAdapter;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+
 /**
- * Created by Caleb Davis on 4/22/15.
+ * Created by Caleb Davis on 5/4/15.
  */
-public class RegisterActivity extends Activity{
-
-    EditText editTextUserName, editTextStudentAdvisor, editTextStudentEmail, editTextAdvisorEmail;
-    Button buttonCreateAccount;
-
+public class CoursesTakenListViewActivity extends Activity {
+    private CoursesDbAdapter dbHelper;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.courses);
+        dbHelper = new CoursesDbAdapter(this);
+        dbHelper.open();
 
+        ArrayList<StudentCourse> searchResults = GetSearchResults();
 
-        // student full name
-        editTextUserName = (EditText) findViewById(R.id.editTextUserName);
-        // advisor full name
-        editTextStudentAdvisor = (EditText) findViewById(R.id.editTextStudentAdvisor);
-        // student usm email
-        editTextStudentEmail = (EditText) findViewById(R.id.editTextStudentEmail);
-        // advisor usm email
-        editTextAdvisorEmail = (EditText) findViewById(R.id.editTextAdvisorEmail);
-        // submit button
-        buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
+        final ListView lv1 = (ListView) findViewById(R.id.coursesListView);
+        lv1.setAdapter(new MyCustomBaseAdapter(this, searchResults));
 
-        buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                // Logout current user
-                ParseUser.logOut();
-                finish();
-            }
-        });
-    }
-
-    private void checkButtonClick() {
-
-
-        Button myButton = (Button) findViewById(R.id.buttonCreateAccount);
-        myButton.setOnClickListener(new View.OnClickListener() {
-
+        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-
-
-
-                Toast.makeText(getApplicationContext(),
-                        "Button was clicked", Toast.LENGTH_LONG).show();
-
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Object o = lv1.getItemAtPosition(position);
+                StudentCourse fullObject = (StudentCourse)o;
+                Toast.makeText(CoursesTakenListViewActivity.this, "You have chosen: " + " " + fullObject.getCourseId(), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
+    private ArrayList<StudentCourse> GetSearchResults(){
+        ArrayList<StudentCourse> results = new ArrayList<StudentCourse>();
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String student_id = currentUser.getUsername().toString();
+
+        results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "true");
+
+        return results;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,8 +95,8 @@ public class RegisterActivity extends Activity{
             startActivity(intent);
             finish();
         }
-
+        
         return super.onOptionsItemSelected(item);
     }
 
-}
+    }
