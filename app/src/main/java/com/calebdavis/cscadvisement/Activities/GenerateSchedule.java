@@ -1,10 +1,14 @@
 package com.calebdavis.cscadvisement.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.calebdavis.cscadvisement.R;
@@ -19,16 +23,58 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- * Created by user on 5/4/15.
+ * Created by Caleb Davis on 5/4/15.
  */
 public class GenerateSchedule extends Activity {
     private CoursesDbAdapter dbHelper;
     String user_id;
+    Button buttonSend;
+    String to, subject, message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_schedule);
+
+        buttonSend = (Button) findViewById(R.id.findSelected);
+
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences prefs = GenerateSchedule.this.getSharedPreferences("ContactInfo", Context.MODE_PRIVATE);
+                String user_email = prefs.getString("email", null);
+                String advisor_email = prefs.getString("advisor_email", null);
+                String name = prefs.getString("name", null);
+                String advisor_name = prefs.getString("advisor", null);
+                subject = name + "'s schedule for next semester.";
+                to = advisor_email;
+
+                ArrayList<StudentCourse> schedule = GetSearchResults();
+                String schedule_string = "";
+
+                for (StudentCourse s : schedule)
+                {
+                    schedule_string += s.getCourseId() + "\n";
+                }
+
+                message = "Dear " + advisor_name + ", \n" +
+                        "I would like to take these courses next semester: \n" + schedule_string;
+
+
+
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+                email.putExtra(Intent.EXTRA_SUBJECT, subject);
+                email.putExtra(Intent.EXTRA_TEXT, message);
+
+                // we need setType to prompts only email clients.
+                email.setType("message/rfc822");
+
+                startActivity(Intent.createChooser(email, "Choose an Email client :"));
+
+            }});
 
         dbHelper = new CoursesDbAdapter(this);
         dbHelper.open();
@@ -269,7 +315,9 @@ public class GenerateSchedule extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.profile) {
-            return true;
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         if (id == R.id.logout){
@@ -284,10 +332,6 @@ public class GenerateSchedule extends Activity {
             startActivity(intent);
             finish();
         }
-
-
-
-       
 
         if (id == R.id.get_advised){
             // show courses taken

@@ -88,6 +88,12 @@ public class CoursesNotTakenListViewActivity extends Activity {
             finish();
         }
 
+        if (id == R.id.courses){
+            // show courses taken
+            Intent intent = new Intent(this, DegreeProgressActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
 
         if (id == R.id.get_advised){

@@ -59,6 +59,11 @@ public class RegisterActivity extends Activity {
                 editor.putString("advisor_email", advisor_email);
                 editor.commit();
 
+                Intent intent = new Intent(RegisterActivity.this,
+                        ProfileActivity.class);
+                startActivity(intent);
+                finish();
+
             }
         });
     }
@@ -82,7 +87,16 @@ public class RegisterActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.profile) {
-            return true;
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        if (id == R.id.courses){
+            // show courses taken
+            Intent intent = new Intent(this, DegreeProgressActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         if (id == R.id.get_advised){

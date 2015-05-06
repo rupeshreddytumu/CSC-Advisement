@@ -64,6 +64,11 @@ public class MainActivity extends Activity {
                 editor.putString("advisor_email", advisor_email);
                 editor.commit();
 
+                Intent intent = new Intent(MainActivity.this,
+                        ProfileActivity.class);
+                startActivity(intent);
+                finish();
+
             }
         });
 
