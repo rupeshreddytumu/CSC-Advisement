@@ -5,43 +5,16 @@
     android:orientation="vertical"
     android:padding="6dip" >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Student ID: "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_below="@+id/textView"
-        android:text="CourseID: "
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Course: "
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:text="Status: "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cid"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_alignBaseline="@+id/textView2"
-        android:text="TextView"
-        android:textColor="#00abff"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <TextView
         android:id="@+id/cid"
@@ -54,15 +27,6 @@
         android:textColor="#ffd700"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <TextView
-        android:id="@+id/sid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_alignBaseline="@+id/textView"
-        android:text="TextView"
-        android:textColor="#ffffff"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
 
 </RelativeLayout>

@@ -70,7 +70,9 @@ public class WelcomeActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.profile) {
-            return true;
+                Intent intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
+                finish();
         }
 
         if (id == R.id.logout){
@@ -86,30 +88,9 @@ public class WelcomeActivity extends Activity {
             finish();
         }
 
-        if (id == R.id.not_courses){
+        if (id == R.id.get_advised){
             // show courses taken
-            Intent intent = new Intent(this, CoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.courses_taken){
-            // show courses taken
-            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.fall_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, FallCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.spring_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, SpringCoursesNotTakenListViewActivity.class);
+            Intent intent = new Intent(this, GenerateSchedule.class);
             startActivity(intent);
             finish();
         }

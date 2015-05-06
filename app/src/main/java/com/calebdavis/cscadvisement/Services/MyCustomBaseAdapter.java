@@ -42,8 +42,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.courses_not_taken, null);
             holder = new ViewHolder();
             holder.cid = (TextView) convertView.findViewById(R.id.cid);
-            holder.sid = (TextView) convertView.findViewById(R.id.sid);
-            holder.status = (TextView) convertView.findViewById(R.id.status);
+
+
 
             convertView.setTag(holder);
         } else {
@@ -51,16 +51,15 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         }
 
         holder.cid.setText(searchArrayList.get(position).getCourseId());
-        holder.sid.setText(searchArrayList.get(position).getSid());
-        holder.status.setText(searchArrayList.get(position).getTaken());
+
+
 
         return convertView;
     }
 
     static class ViewHolder {
         TextView cid;
-        TextView sid;
-        TextView status;
+
 
     }
 }

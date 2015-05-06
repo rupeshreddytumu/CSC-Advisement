@@ -5,25 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
 import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
 import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
-import com.calebdavis.cscadvisement.Services.MyCustomBaseAdapter;
+import com.calebdavis.cscadvisement.Services.MyCustomArrayAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
 /**
- * Created by Caleb Davis on 5/4/15.
+ * Created by user on 5/4/15.
  */
-
-public class SpringCoursesNotTakenListViewActivity extends Activity {
-
+public class UpdateDegreeProgressActivity extends Activity {
     private CoursesDbAdapter dbHelper;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,37 +30,20 @@ public class SpringCoursesNotTakenListViewActivity extends Activity {
         ArrayList<StudentCourse> searchResults = GetSearchResults();
 
         final ListView lv1 = (ListView) findViewById(R.id.coursesListView);
-        lv1.setAdapter(new MyCustomBaseAdapter(this, searchResults));
-
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lv1.getItemAtPosition(position);
-                StudentCourse fullObject = (StudentCourse)o;
-                Toast.makeText(SpringCoursesNotTakenListViewActivity.this, "You have chosen: " + " " + fullObject.getCourseId(), Toast.LENGTH_LONG).show();
-            }
-        });
+        lv1.setAdapter(new MyCustomArrayAdapter(this, R.layout.select_courses, searchResults));
     }
 
     private ArrayList<StudentCourse> GetSearchResults(){
         ArrayList<StudentCourse> results = new ArrayList<StudentCourse>();
-        ArrayList<StudentCourse> new_results = new ArrayList<StudentCourse>();
-        ArrayList<StudentCourse> final_results = new ArrayList<StudentCourse>();
-
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         String student_id = currentUser.getUsername().toString();
 
-        //results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "false");
-        results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
-        new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "both");
-        //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
+        results = (ArrayList<StudentCourse>) dbHelper.testCoursesForSpecificStudent(student_id);
 
-        final_results.addAll(new_results);
-        final_results.addAll(results);
-
-        return final_results;
+        return results;
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,20 +69,15 @@ public class SpringCoursesNotTakenListViewActivity extends Activity {
             finish();
         }
 
-
-        if (id == R.id.courses){
-            // show courses taken
-            Intent intent = new Intent(this, DegreeProgressActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
         if (id == R.id.get_advised){
             // show courses taken
             Intent intent = new Intent(this, GenerateSchedule.class);
             startActivity(intent);
             finish();
         }
+
+
+
         return super.onOptionsItemSelected(item);
     }
 }

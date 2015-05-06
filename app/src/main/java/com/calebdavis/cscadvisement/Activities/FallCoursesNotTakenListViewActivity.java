@@ -98,26 +98,6 @@ public class FallCoursesNotTakenListViewActivity extends Activity {
             finish();
         }
 
-        if (id == R.id.courses_taken){
-            // show courses taken
-            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.fall_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, FallCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.spring_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, SpringCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (id == R.id.get_advised){
             // show courses taken

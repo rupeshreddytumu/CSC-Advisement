@@ -78,7 +78,9 @@ public class CoursesNotTakenListViewActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.profile) {
-            return true;
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         if (id == R.id.logout){
@@ -87,33 +89,6 @@ public class CoursesNotTakenListViewActivity extends Activity {
         }
 
 
-        if (id == R.id.courses){
-            // show courses taken
-            Intent intent = new Intent(this, DegreeProgressActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.courses_taken){
-            // show courses taken
-            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.fall_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, FallCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.spring_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, SpringCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (id == R.id.get_advised){
             // show courses taken
@@ -121,6 +96,8 @@ public class CoursesNotTakenListViewActivity extends Activity {
             startActivity(intent);
             finish();
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 

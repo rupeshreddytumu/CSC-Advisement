@@ -2,13 +2,13 @@ package com.calebdavis.cscadvisement.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
 import com.parse.ParseUser;
@@ -16,17 +16,18 @@ import com.parse.ParseUser;
 /**
  * Created by Caleb Davis on 4/22/15.
  */
-public class RegisterActivity extends Activity{
+public class RegisterActivity extends Activity {
 
-    EditText editTextUserName, editTextStudentAdvisor, editTextStudentEmail, editTextAdvisorEmail;
     Button buttonCreateAccount;
+    EditText editTextUserName, editTextStudentAdvisor, editTextStudentEmail, editTextAdvisorEmail;
+    public static final String PREFS_NAME = "ContactInfo";
+    String name, email, advisor, advisor_email;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         // student full name
         editTextUserName = (EditText) findViewById(R.id.editTextUserName);
@@ -41,32 +42,27 @@ public class RegisterActivity extends Activity{
 
         buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
 
+            @Override
             public void onClick(View arg0) {
                 // Logout current user
-                ParseUser.logOut();
-                finish();
+                name = editTextUserName.getText().toString();
+                advisor =  editTextStudentAdvisor.getText().toString();
+                email =  editTextStudentEmail.getText().toString();
+                advisor_email = editTextAdvisorEmail.getText().toString();
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+                // Writing data to SharedPreferences
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("name", name);
+                editor.putString("advisor", advisor);
+                editor.putString("student_email", email);
+                editor.putString("advisor_email", advisor_email);
+                editor.commit();
+
             }
         });
     }
 
-    private void checkButtonClick() {
-
-
-        Button myButton = (Button) findViewById(R.id.buttonCreateAccount);
-        myButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-
-
-                Toast.makeText(getApplicationContext(),
-                        "Button was clicked", Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-    }
 
 
 
@@ -109,12 +105,14 @@ public class RegisterActivity extends Activity{
             finish();
         }
 
-        if (id == R.id.not_courses){
+        if (id == R.id.get_advised){
             // show courses taken
-            Intent intent = new Intent(this, CoursesNotTakenListViewActivity.class);
+            Intent intent = new Intent(this, GenerateSchedule.class);
             startActivity(intent);
             finish();
         }
+
+
 
         return super.onOptionsItemSelected(item);
     }

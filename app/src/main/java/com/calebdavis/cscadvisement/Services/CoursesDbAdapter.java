@@ -263,7 +263,7 @@ public class CoursesDbAdapter {
                 course.setSid((c.getString(c.getColumnIndex(KEY_STUDENT_ID))));
                 course.setCourseId((c.getString(c.getColumnIndex(KEY_COURSE_ID))));
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
-                course.setTaken(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+                course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
                 course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
 
                 // adding to courses taken list

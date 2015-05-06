@@ -28,7 +28,7 @@ public class GenerateSchedule extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.courses);
+        setContentView(R.layout.student_schedule);
 
         dbHelper = new CoursesDbAdapter(this);
         dbHelper.open();
@@ -285,26 +285,9 @@ public class GenerateSchedule extends Activity {
             finish();
         }
 
-        if (id == R.id.courses_taken){
-            // show courses taken
-            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
-        if (id == R.id.fall_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, FallCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
-        if (id == R.id.spring_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, SpringCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
+       
 
         if (id == R.id.get_advised){
             // show courses taken

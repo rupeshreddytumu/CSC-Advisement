@@ -83,7 +83,9 @@ public class DegreeProgressActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.profile) {
-            return true;
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         if (id == R.id.logout){
@@ -91,33 +93,6 @@ public class DegreeProgressActivity extends Activity {
             finish();
         }
 
-        if (id == R.id.not_courses){
-            // show courses taken
-            Intent intent = new Intent(this, CoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.courses_taken){
-            // show courses taken
-            Intent intent = new Intent(this, CoursesTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.fall_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, FallCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-        if (id == R.id.spring_courses_not_taken){
-            // show courses taken
-            Intent intent = new Intent(this, SpringCoursesNotTakenListViewActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (id == R.id.get_advised){
             // show courses taken
@@ -125,6 +100,7 @@ public class DegreeProgressActivity extends Activity {
             startActivity(intent);
             finish();
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -138,12 +114,6 @@ public class DegreeProgressActivity extends Activity {
         String course_id_test = cursor.getString(cursor.getColumnIndexOrThrow("course_id"));
         final String status_test = cursor.getString(cursor.getColumnIndexOrThrow("status"));
 
-
-
-
-
-
-
         // The desired columns to be bound
         String[] columns = new String[] {
                 CoursesDbAdapter.KEY_STUDENT_ID,
@@ -155,7 +125,7 @@ public class DegreeProgressActivity extends Activity {
         int[] to = new int[] {
                 R.id.sid,
                 R.id.cid,
-                R.id.status,
+
         };
 
         // create the adapter using the cursor pointing to the desired data
@@ -189,10 +159,6 @@ public class DegreeProgressActivity extends Activity {
 
                     String newStatus = status;
 
-
-
-
-
                     if (newStatus.equals("false")){
 
                         newStatus = "true";
@@ -209,8 +175,6 @@ public class DegreeProgressActivity extends Activity {
                         //statusTextView.setText(newStatus);
 
                     }
-
-
 
                 }
 
