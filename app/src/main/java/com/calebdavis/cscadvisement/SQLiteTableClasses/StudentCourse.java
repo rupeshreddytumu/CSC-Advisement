@@ -8,17 +8,19 @@ public class StudentCourse implements Comparable{
     String cid;
     String taken;
     String semester;
+    String instructor;
     int id;
     int code;
 
 
     public StudentCourse(){}
-    public StudentCourse(String sid, String cid, String taken, String semester, int code){
+    public StudentCourse(String sid, String cid, String taken, String semester, int code, String instructor){
         this.sid = sid;
         this.cid = cid;
         this.taken = taken;
         this.semester = semester;
         this.code = code;
+        this.instructor = instructor;
     }
 
     public long getId() {
@@ -58,6 +60,13 @@ public class StudentCourse implements Comparable{
 
     public int getCode() {return code;}
     public void setCode(int code) { this.code = code;}
+
+    public String getInstructor() {
+        return instructor;
+    }
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
 
     @Override
     public int compareTo(Object another) {

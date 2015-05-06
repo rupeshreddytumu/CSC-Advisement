@@ -57,8 +57,8 @@ public class SpringCoursesNotTakenListViewActivity extends Activity {
         String student_id = currentUser.getUsername().toString();
 
         //results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "false");
-        results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
-        new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "both");
+        results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "Spring");
+        new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "Both");
         //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
 
         final_results.addAll(new_results);

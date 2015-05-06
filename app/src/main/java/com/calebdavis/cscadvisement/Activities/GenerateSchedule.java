@@ -102,14 +102,14 @@ public class GenerateSchedule extends Activity {
 
         if (month < 6){
             // spring semester - > generate schedule for fall semester
-            results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(user_id, "false", "fall");
-            new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(user_id, "false", "both");
+            results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(user_id, "false", "Fall");
+            new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(user_id, "false", "Both");
         }
 
         if (month > 7){
             // fall semester - > generate schedule for spring semester
-            results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(user_id, "false", "spring");
-            new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(user_id, "false", "both");
+            results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(user_id, "false", "Spring");
+            new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(user_id, "false", "Both");
         }
 
         final_results.addAll(new_results);

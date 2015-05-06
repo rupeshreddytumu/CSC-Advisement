@@ -5,10 +5,8 @@
     android:orientation="vertical"
     android:padding="6dip" >
 
-
-
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -17,16 +15,55 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/cid"
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_below="@+id/textView"
+        android:text="Instructor: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:text="Semester: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/semester"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cid"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_alignBaseline="@+id/textView2"
+        android:text="TextView"
+        android:textColor="#00abff"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:id="@+id/instructor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/sid"
         android:layout_toRightOf="@+id/textView1"
         android:layout_alignBaseline="@+id/textView1"
         android:text="TextView"
+        android:textColor="#ffffff"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:id="@+id/cid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_alignBaseline="@+id/textView"
+        android:text="TextView"
         android:textColor="#ffd700"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-
-
 </RelativeLayout>
+

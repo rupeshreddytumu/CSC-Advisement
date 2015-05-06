@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
 import com.calebdavis.cscadvisement.SQLiteTableClasses.StudentCourse;
@@ -36,14 +33,7 @@ public class FallCoursesNotTakenListViewActivity extends Activity {
         final ListView lv1 = (ListView) findViewById(R.id.coursesListView);
         lv1.setAdapter(new MyCustomBaseAdapter(this, searchResults));
 
-        lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lv1.getItemAtPosition(position);
-                StudentCourse fullObject = (StudentCourse)o;
-                Toast.makeText(FallCoursesNotTakenListViewActivity.this, "You have chosen: " + " " + fullObject.getCourseId(), Toast.LENGTH_LONG).show();
-            }
-        });
+
     }
 
     private ArrayList<StudentCourse> GetSearchResults(){
@@ -56,14 +46,15 @@ public class FallCoursesNotTakenListViewActivity extends Activity {
         String student_id = currentUser.getUsername().toString();
 
         //results = (ArrayList<StudentCourse>) dbHelper.getAllCoursesNotTakenByStudent(student_id, "false");
-        results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "fall");
-        new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "both");
+        results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "Fall");
+        new_results = (ArrayList<StudentCourse>) dbHelper.getAllBothSemesterCoursesNotTakenByStudent(student_id, "false", "Both");
         //results = (ArrayList<StudentCourse>) dbHelper.getAllFallCoursesNotTakenByStudent(student_id, "false", "spring");
 
         final_results.addAll(new_results);
         final_results.addAll(results);
 
         return final_results;
+
     }
 
     @Override

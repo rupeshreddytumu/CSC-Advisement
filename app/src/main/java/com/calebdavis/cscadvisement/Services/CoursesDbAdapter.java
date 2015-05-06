@@ -25,6 +25,7 @@ public class CoursesDbAdapter {
     public static final String KEY_STUDENT_ID = "student_id";
     public static final String KEY_SEMESTER = "semester";
     public static final String KEY_CODE = "code";
+    public static final String KEY_INSTRUCTOR = "instructor";
 
 
 
@@ -68,7 +69,7 @@ public class CoursesDbAdapter {
 
     private static final String CREATE_TABLE_STUDENT_COURSES = "CREATE TABLE "
             + STUDENT_COURSES_TABLE + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_STUDENT_ID + " TEXT, " + KEY_COURSE_ID + " TEXT, " +  KEY_STATUS  + " TEXT, " + KEY_SEMESTER + " TEXT, " + KEY_CODE + " INTEGER" +  ")";
+            + KEY_STUDENT_ID + " TEXT, " + KEY_COURSE_ID + " TEXT, " +  KEY_STATUS  + " TEXT, " + KEY_SEMESTER + " TEXT, " + KEY_CODE + " INTEGER, "  + KEY_INSTRUCTOR + " TEXT"+")";
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper(Context context) {
@@ -142,6 +143,7 @@ public class CoursesDbAdapter {
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
                 course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
                 course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
+                course.setInstructor(c.getString(c.getColumnIndex(KEY_INSTRUCTOR)));
 
 
                 // adding to courses taken list
@@ -177,6 +179,7 @@ public class CoursesDbAdapter {
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
                 course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
                 course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+                course.setInstructor(c.getString(c.getColumnIndex(KEY_INSTRUCTOR)));
 
                 // adding to courses taken list
                 courses.add(course);
@@ -212,6 +215,7 @@ public class CoursesDbAdapter {
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
                 course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
                 course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
+                course.setInstructor(c.getString(c.getColumnIndex(KEY_INSTRUCTOR)));
 
                 // adding to courses taken list
                 courses.add(course);
@@ -223,13 +227,15 @@ public class CoursesDbAdapter {
         return courses;
     }
 
-    public long createStudentCourse(String student_id, String course_id, String status, String semester, int code){
+    public long createStudentCourse(String student_id, String course_id, String status, String semester, int code, String instructor){
         ContentValues values = new ContentValues();
         values.put(KEY_STUDENT_ID, student_id);
         values.put(KEY_COURSE_ID, course_id);
         values.put(KEY_STATUS, status);
         values.put(KEY_SEMESTER, semester);
         values.put(KEY_CODE, code);
+        values.put(KEY_INSTRUCTOR, instructor);
+
 
         long id =  mDb.insert(STUDENT_COURSES_TABLE, null, values);
         return id;
@@ -265,6 +271,7 @@ public class CoursesDbAdapter {
                 course.setTaken(c.getString(c.getColumnIndex(KEY_STATUS)));
                 course.setSemester(c.getString(c.getColumnIndex(KEY_SEMESTER)));
                 course.setCode(c.getInt(c.getColumnIndex(KEY_CODE)));
+                course.setInstructor(c.getString(c.getColumnIndex(KEY_INSTRUCTOR)));
 
                 // adding to courses taken list
                 courses.add(course);
@@ -325,23 +332,23 @@ public class CoursesDbAdapter {
     public void insertStudentCourses(String studentId){
 
 
-        createStudentCourse(studentId, "CSC 101 - Intro to Programming", "false", "both" , 101);
-        createStudentCourse(studentId, "CSC 102 - Advanced Computer Programming", "false", "both", 102);
-        createStudentCourse(studentId, "CSC 203 - Intro to Computer Systems", "false", "fall", 203);
-        createStudentCourse(studentId, "CSC 204 - Computer Organizations", "false", "spring", 204);
-        createStudentCourse(studentId, "CSC 300 - Discrete Math", "false", "fall", 300);
-        createStudentCourse(studentId, "CSC 306 - Operating Systems", "false", "fall", 306);
-        createStudentCourse(studentId, "CSC 307 - Data Structures", "false", "both", 307);
-        createStudentCourse(studentId, "CSC 309 - Computers and Society", "false", "both", 309);
-        createStudentCourse(studentId, "CSC 317 - Object Oriented Programming", "false", "spring", 317);
-        createStudentCourse(studentId, "CSC 320 - Intro to Linear Programming", "false", "fall", 320);
-        createStudentCourse(studentId, "CSC 408 - Organization of Programming Languages", "false", "fall", 408);
-        createStudentCourse(studentId, "CSC 411 - Relational Database Management Systems", "false", "fall", 411);
-        createStudentCourse(studentId, "CSC 412 - Intro to Artificial Intelligence", "false", "spring", 412);
-        createStudentCourse(studentId, "CSC 413 - Algorithms", "false", "fall", 413);
-        createStudentCourse(studentId, "CSC 414 - Software Design and Development", "false", "fall", 414);
-        createStudentCourse(studentId, "CSC 415 - Theory of Programming Languages", "false", "spring", 415);
-        createStudentCourse(studentId, "CSC 424 - Software Engineering II", "false", "spring", 424);
+        createStudentCourse(studentId, "CSC 101 - Intro to Programming", "false", "Both" , 101, "Glenn Bond");
+        createStudentCourse(studentId, "CSC 102 - Advanced Computer Programming", "false", "Both", 102, "Glenn Bond");
+        createStudentCourse(studentId, "CSC 203 - Intro to Computer Systems", "false", "Fall", 203, "Wonryull Koh");
+        createStudentCourse(studentId, "CSC 204 - Computer Organizations", "false", "Spring", 204, "TBA");
+        createStudentCourse(studentId, "CSC 300 - Discrete Math", "false", "Fall", 300, "Bikramjit Banerjee");
+        createStudentCourse(studentId, "CSC 306 - Operating Systems", "false", "Fall", 306, "Glover George");
+        createStudentCourse(studentId, "CSC 307 - Data Structures", "false", "Both", 307, "Beddhu Murali");
+        createStudentCourse(studentId, "CSC 309 - Computers and Society", "false", "Both", 309, "Glenn Bond");
+        createStudentCourse(studentId, "CSC 317 - Object Oriented Programming", "false", "Spring", 317, "Wonryull Koh");
+        createStudentCourse(studentId, "CSC 320 - Intro to Linear Programming", "false", "Fall", 320, "Bikramjit Banerjee");
+        createStudentCourse(studentId, "CSC 408 - Organization of Programming Languages", "false", "Fall", 408, "Dia Ali");
+        createStudentCourse(studentId, "CSC 411 - Relational Database Management Systems", "false", "Fall", 411, "Nan Wang");
+        createStudentCourse(studentId, "CSC 412 - Intro to Artificial Intelligence", "false", "Spring", 412, "Bikramjit Banerjee");
+        createStudentCourse(studentId, "CSC 413 - Algorithms", "false", "Fall", 413, "Wonryull Koh");
+        createStudentCourse(studentId, "CSC 414 - Software Design and Development", "false", "Fall", 414, "Dia Ali");
+        createStudentCourse(studentId, "CSC 415 - Theory of Programming Languages", "false", "Spring", 415, "Dia Ali");
+        createStudentCourse(studentId, "CSC 424 - Software Engineering II", "false", "Spring", 424, "Nan Wang");
 
     }
 }

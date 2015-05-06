@@ -42,6 +42,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.courses_not_taken, null);
             holder = new ViewHolder();
             holder.cid = (TextView) convertView.findViewById(R.id.cid);
+            holder.instructor = (TextView) convertView.findViewById(R.id.instructor);
+            holder.semester = (TextView) convertView.findViewById(R.id.semester);
 
 
 
@@ -51,6 +53,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         }
 
         holder.cid.setText(searchArrayList.get(position).getCourseId());
+        holder.instructor.setText(searchArrayList.get(position).getInstructor());
+        holder.semester.setText(searchArrayList.get(position).getSemester());
 
 
 
@@ -59,6 +63,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView cid;
+        TextView instructor;
+        TextView semester;
 
 
     }
