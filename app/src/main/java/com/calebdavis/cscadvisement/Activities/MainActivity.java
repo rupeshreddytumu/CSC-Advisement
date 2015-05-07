@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.calebdavis.cscadvisement.R;
+import com.calebdavis.cscadvisement.Services.CoursesDbAdapter;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
@@ -26,11 +27,14 @@ public class MainActivity extends Activity {
     Button buttonCreateAccount;
     EditText editTextUserName, editTextStudentAdvisor, editTextStudentEmail, editTextAdvisorEmail;
     public static final String PREFS_NAME = "ContactInfo";
-    String name, email, advisor, advisor_email;
+    String name, email, advisor, advisor_email, student_id;
+    private CoursesDbAdapter dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
 
@@ -55,6 +59,9 @@ public class MainActivity extends Activity {
                 email =  editTextStudentEmail.getText().toString();
                 advisor_email = editTextAdvisorEmail.getText().toString();
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                student_id = currentUser.getUsername().toString();
 
                 // Writing data to SharedPreferences
                 SharedPreferences.Editor editor = settings.edit();
@@ -87,6 +94,7 @@ public class MainActivity extends Activity {
                 // Send logged in users to Welcome.class
                 try {
                     if (checkIfRegistrationNeeded()){
+
                         Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();
@@ -107,6 +115,7 @@ public class MainActivity extends Activity {
 
             } else {
                 // Send user to LoginSignupActivity.class
+
                 Intent intent = new Intent(MainActivity.this,
                         LoginSignupActivity.class);
                 startActivity(intent);
@@ -151,11 +160,6 @@ public class MainActivity extends Activity {
             return true;
         }
 
-        Toast.makeText(
-                getApplicationContext(),
-                "INPUT: " + readString,
-                Toast.LENGTH_LONG).show();
-
         return false;
     }
 
@@ -168,6 +172,10 @@ public class MainActivity extends Activity {
         //List<Course> coursesTaken = Course.find(Course.class, "selected = ?", "true");
         ParseUser currentUser = ParseUser.getCurrentUser();
         String studentId = currentUser.getUsername().toString();
+
+        dbHelper = new CoursesDbAdapter(this);
+        dbHelper.open();
+        dbHelper.insertStudentCourses(studentId);
         //if (!coursesTaken.isEmpty()){
 
 

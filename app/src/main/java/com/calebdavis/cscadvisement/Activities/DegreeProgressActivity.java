@@ -35,6 +35,8 @@ public class DegreeProgressActivity extends Activity {
         lv1.setAdapter(new MyCustomBaseAdapter(this, searchResults));
 
 
+
+        dbHelper.close();
     }
 
     private ArrayList<StudentCourse> GetSearchResults(){
@@ -42,6 +44,7 @@ public class DegreeProgressActivity extends Activity {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         String student_id = currentUser.getUsername().toString();
+
 
         results = (ArrayList<StudentCourse>) dbHelper.testCoursesForSpecificStudent(student_id);
         Collections.sort(results);

@@ -35,6 +35,8 @@ public class GenerateSchedule extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_schedule);
+        dbHelper = new CoursesDbAdapter(this);
+        dbHelper.open();
 
         buttonSend = (Button) findViewById(R.id.findSelected);
 
@@ -50,6 +52,7 @@ public class GenerateSchedule extends Activity {
                 String advisor_name = prefs.getString("advisor", null);
                 subject = name + "'s schedule for next semester.";
                 to = advisor_email;
+
 
                 ArrayList<StudentCourse> schedule = GetSearchResults();
                 String schedule_string = "";
@@ -76,12 +79,14 @@ public class GenerateSchedule extends Activity {
 
             }});
 
-        dbHelper = new CoursesDbAdapter(this);
-        dbHelper.open();
+
 
         ArrayList<StudentCourse> searchResults = GetSearchResults();
         final ListView lv1 = (ListView) findViewById(R.id.coursesListView);
         lv1.setAdapter(new MyCustomBaseAdapter(this, searchResults));
+
+
+        //dbHelper.close();
 
 
     }

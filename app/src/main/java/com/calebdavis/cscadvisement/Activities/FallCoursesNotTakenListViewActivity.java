@@ -73,7 +73,9 @@ public class FallCoursesNotTakenListViewActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.profile) {
-            return true;
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         if (id == R.id.logout){

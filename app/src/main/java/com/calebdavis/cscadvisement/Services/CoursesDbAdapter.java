@@ -336,7 +336,7 @@ public class CoursesDbAdapter {
         createStudentCourse(studentId, "CSC 102 - Advanced Computer Programming", "false", "Both", 102, "Glenn Bond");
         createStudentCourse(studentId, "CSC 203 - Intro to Computer Systems", "false", "Fall", 203, "Wonryull Koh");
         createStudentCourse(studentId, "CSC 204 - Computer Organizations", "false", "Spring", 204, "TBA");
-        createStudentCourse(studentId, "CSC 300 - Discrete Math", "false", "Fall", 300, "Bikramjit Banerjee");
+        createStudentCourse(studentId, "CSC 300 - Foundations of Computer Science", "false", "Fall", 300, "Bikramjit Banerjee");
         createStudentCourse(studentId, "CSC 306 - Operating Systems", "false", "Fall", 306, "Glover George");
         createStudentCourse(studentId, "CSC 307 - Data Structures", "false", "Both", 307, "Beddhu Murali");
         createStudentCourse(studentId, "CSC 309 - Computers and Society", "false", "Both", 309, "Glenn Bond");
